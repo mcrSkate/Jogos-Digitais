@@ -8,21 +8,59 @@ let mana = 0
 let enemyMana = 0
 let actualEnemy = 0
 let img
+let canvas
+
+//Entities
+let lichKing
+let warrior
+let shieldman
+let spearman
+let archer
+
+//for animations
+//spellcast
+const spellcast_right = 64;
+const spellcast_left = 192;
+const spellcast_frames = 7;
+//thrust
+const thrust_right = 320;
+const thurst_left = 448;
+const thurst_frames = 8;
+//walk
+const walking_right = 576;
+const walking_left = 704;
+const walking_frames = 9;
+//slash
+const slash_right = 832;
+const slash_left = 960;
+const slash_frames = 6;
+//shoot
+const shoot_right = 1088;
+const shoot_left = 1216;
+const shoot_frames = 13;
+
+
 
 function preload(){
   back = loadImage('assets/back.jpg')
+
+  lichKing = loadImage('assets/sprites/LichKing.png')
+  warrior = loadImage('assets/sprites/Warrior.png')
+  shieldman = loadImage('assets/sprites/Shieldman.png')
+  spearman = loadImage('assets/sprites/Spearman.png')
+  archer = loadImage('assets/sprites/Archer.png')
 }
 
 function setup() {
   frameRate(60)
-  createCanvas(windowWidth, windowHeight);
+  canvas = createCanvas(windowWidth, windowHeight);
   game = new Game1()
 }
 
 function enemyHandler(){
   rn = Math.floor(random()*100)%2
   if(enemyMana >= 6){
-    console.log(rn, actualEnemy)
+    s(rn, actualEnemy)
     if(rn == 0){
       if(actualEnemy == 0){
         enemiesOnHold.push(new Tropa(700, 200, 3, 80, -1))
@@ -129,8 +167,10 @@ function spawn(){
   }
 }
 
+let current_frame = 0;
 function draw() {
   image(back, 0, 0, windowWidth, windowHeight)
+  current_frame += 1;
   if (isRunning == "playing"){
     enemyHandler()
     stroke(0)
