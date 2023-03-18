@@ -60,7 +60,7 @@ function setup() {
 function enemyHandler(){
   rn = Math.floor(random()*100)%2
   if(enemyMana >= 6){
-    s(rn, actualEnemy)
+    console.log(rn, actualEnemy)
     if(rn == 0){
       if(actualEnemy == 0){
         enemiesOnHold.push(new Tropa(700, 200, 3, 80, -1))
