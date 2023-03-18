@@ -28,12 +28,39 @@ class Tropa{
   
   display(){
     noStroke()
-    fill(0,(153*this.tipo) % 255,(76*this.tipo) % 255) 
-    circle(this.x, windowHeight - 40 - 100, 80)
+
+    //seleciona qual é o sprite pelo tipo
+    let troop_sprite = archer
+    if (this.tipo == 2)
+    {
+      troop_sprite = archer
+    }
+    
+    //depois faz um codigo pra selecionar qual é a animação
+    // nesse codigo eles tao sempre atirando flechas
+    let imgW = (current_frame % shoot_frames) * 64;
+    let imgH = 0;
+    if (this.side == -1)
+    {
+      imgH = shoot_right;
+    }
+    else
+    {
+      imgH = shoot_left;
+    }
+
+    //desenha o boneco
+    //argumentos da imagem: sprite, imagemX, imagemY, esses 6 ultimos argumentos deixa fixo
+    //o imgW seleciona o frame atual da animacao
+    //o imgH seleciona qual é animacao, elas estão descritas no sketch.js
+    image(troop_sprite, this.x, windowHeight - 40 - 100, 64, 64, imgW , imgH, 64, 64);
     fill(255,0,0)
     rect(this.x-40, windowHeight-200, 80, 20)
     fill(255)
     textSize(12)
     text(Math.trunc(this.life), this.x-10, windowHeight-185)
   }
+
+
+
 }
