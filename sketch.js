@@ -19,26 +19,25 @@ let archer
 
 //for animations
 //spellcast
-const spellcast_right = 64;
-const spellcast_left = 192;
+const spellcast= 64;
 const spellcast_frames = 7;
 //thrust
-const thrust_right = 320;
-const thurst_left = 448;
+const thrust = 320;
 const thurst_frames = 8;
 //walk
-const walking_right = 576;
-const walking_left = 704;
+const walking = 576;
 const walking_frames = 9;
+const warrior_walking = 1504;
+const archer_walking = 1504
 //slash
-const slash_right = 832;
-const slash_left = 960;
-const slash_frames = 6;
+const slash = 832;
+const slash_frames = 9;
+const warrior_slash = 2016;
+const warrior_slash_frames = 6;
 //shoot
-const shoot_right = 1088;
-const shoot_left = 1216;
+const shoot = 1088;
 const shoot_frames = 13;
-
+let frameCounter = 0;
 
 
 function preload(){
@@ -170,7 +169,11 @@ function spawn(){
 let current_frame = 0;
 function draw() {
   image(back, 0, 0, windowWidth, windowHeight)
-  current_frame += 1;
+  if (frameCounter == 6){
+    current_frame += 1;
+    frameCounter = 0;
+  }
+  frameCounter++;
   if (isRunning == "playing"){
     enemyHandler()
     stroke(0)
