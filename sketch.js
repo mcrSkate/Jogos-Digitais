@@ -38,6 +38,7 @@ const warrior_slash_frames = 6;
 const shoot = 1088;
 const shoot_frames = 13;
 let frameCounter = 0;
+let totalFrameCounter = 0;
 
 
 function preload(){
@@ -56,31 +57,31 @@ function setup() {
   game = new Game1()
 }
 
-function enemyHandler(){
-  rn = Math.floor(random()*100)%2
-  if(enemyMana >= 6){
-    console.log(rn, actualEnemy)
-    if(rn == 0){
-      if(actualEnemy == 0){
-        enemiesOnHold.push(new Tropa(700, 200, 3, 80, -1))
-        enemyMana -= 6
-      }else{
-        actualEnemy = (actualEnemy + 1) % 2
-      }
-    }
-  }
-  if(enemyMana >= 14){
-    console.log(rn, actualEnemy)
-    if(rn == 0){
-      if(actualEnemy == 1){
-      enemiesOnHold.push(new Tropa(500, 300, 4, 160, -1))
-      enemyMana -= 14
-      }else{
-        actualEnemy = (actualEnemy + 1) % 2
-      }
-    } 
-  }
-}
+// function enemyHandler(){
+//   rn = Math.floor(random()*100)%2
+//   if(enemyMana >= 6){
+//     console.log(rn, actualEnemy)
+//     if(rn == 0){
+//       if(actualEnemy == 0){
+//         enemiesOnHold.push(new Tropa(700, 200, 3, 80, -1))
+//         enemyMana -= 6
+//       }else{
+//         actualEnemy = (actualEnemy + 1) % 2
+//       }
+//     }
+//   }
+//   if(enemyMana >= 14){
+//     console.log(rn, actualEnemy)
+//     if(rn == 0){
+//       if(actualEnemy == 1){
+//       enemiesOnHold.push(new Tropa(500, 300, 4, 160, -1))
+//       enemyMana -= 14
+//       }else{
+//         actualEnemy = (actualEnemy + 1) % 2
+//       }
+//     } 
+//   }
+// }
 
 function keyPressed(){
   console.log(keyCode)
@@ -156,14 +157,14 @@ function spawn(){
     }
   }
   
-  if (enemiesOnHold.length > 0){
-    enemyTimer += 1
-    if(enemyTimer % (120 * (enemiesOnHold[0].tipo -2)) == 0){    
-      game.addEnemy(enemiesOnHold[0])
-      enemiesOnHold.shift()
-      enemyTimer = 0
-    }
-  }
+  // if (enemiesOnHold.length > 0){
+  //   enemyTimer += 1
+  //   if(enemyTimer % (120 * (enemiesOnHold[0].tipo -2)) == 0){    
+  //     game.addEnemy(enemiesOnHold[0])
+  //     enemiesOnHold.shift()
+  //     enemyTimer = 0
+  //   }
+  // }
 }
 
 let current_frame = 0;
@@ -174,13 +175,14 @@ function draw() {
     frameCounter = 0;
   }
   frameCounter++;
+  totalFrameCounter++;
   if (isRunning == "playing"){
-    enemyHandler()
     stroke(0)
     drawBases()
     drawLife()
     UI()
     spawn()
+    spawnEnemies(game,"easy")
     mana += 0.035
     enemyMana += 0.035 
     game.fight()
