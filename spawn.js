@@ -72,19 +72,20 @@ function addTroopByType(game, tipo)
     switch (tipo)
     {
         case 1:
-            //to chutando que essa é do lanceiro
-            //esses valores tbm podem mudar
-            game.addEnemy(new Tropa(600, 150, 1, 120, -1))
+            //warrior
+            game.addEnemy(new Tropa(700, 300, 5, 120, -1))
             return
         case 2:
-            //to chutando que essa é o do escudeiro
-            game.addEnemy(new Tropa(1500, 50, 2, 80, -1))
+            //archer
+            game.addEnemy(new Tropa(300, 200, 6, 240, -1))
             return
         case 3:
-            game.addEnemy(new Tropa(700, 200, 3, 80, -1))
+            //spearman
+            game.addEnemy(new Tropa(300, 300, 7, 160, -1))
             return
         case 4:
-            game.addEnemy(new Tropa(500, 300, 4, 160, -1))
+            //shieldman
+            game.addEnemy(new Tropa(1500, 100, 8, 80, -1))
             return        
     }
 }

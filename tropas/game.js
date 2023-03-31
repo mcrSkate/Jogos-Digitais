@@ -17,12 +17,12 @@ class Game1{
   display(){
     if(this.allies.length>0){
       for (let i in this.allies){
-        this.allies[i].display()
+        display_troops(this.allies[i])
       }
     }
     if(this.enemies.length>0){  
       for (let i in this.enemies){
-        this.enemies[i].display()
+        display_troops(this.enemies[i])
       }
     }
   }

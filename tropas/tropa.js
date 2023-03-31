@@ -7,6 +7,7 @@ class Tropa{
     this.speed = 1.5
     this.range = range
     this.side = side
+    this.current_frame = 0
     if(side == 1){
       this.x = 60
     }else{

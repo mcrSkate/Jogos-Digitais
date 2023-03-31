@@ -16,6 +16,10 @@ let warrior
 let shieldman
 let spearman
 let archer
+let enemyWarrior
+let enemyArcher
+let enemySpearman
+let enemyShieldman
 
 //for animations
 //spellcast
@@ -49,6 +53,10 @@ function preload(){
   shieldman = loadImage('assets/sprites/Shieldman.png')
   spearman = loadImage('assets/sprites/Spearman.png')
   archer = loadImage('assets/sprites/Archer.png')
+  enemyWarrior = loadImage('assets/sprites/Azul/Machado.png')
+  enemyShieldman = loadImage('assets/sprites/Azul/Escudo.png')
+  enemySpearman = loadImage('assets/sprites/Azul/Pá.png')
+  enemyArcher = loadImage('assets/sprites/Azul/Estilingue.png')
 }
 
 function setup() {
@@ -87,14 +95,26 @@ function keyPressed(){
   console.log(keyCode)
   if (keyCode === 81){
     if(mana >= 6){  
-      tropasOnHold.push(new Tropa(700, 200, 1, 80, 1))
+      tropasOnHold.push(new Tropa(700, 300, 1, 80, 1))
       mana -= 6
     }
   }
   if (keyCode === 87){
     if(mana >= 14){
-      tropasOnHold.push(new Tropa(500, 300, 2, 160, 1))
+      tropasOnHold.push(new Tropa(300, 200, 2, 240, 1))
       mana -= 14
+    }
+  }
+  if (keyCode === 69){
+    if(mana >= 9){
+      tropasOnHold.push(new Tropa(300, 300, 3, 160, 1))
+      mana -= 9
+    }
+  }
+  if (keyCode === 82){
+    if(mana >= 12){
+      tropasOnHold.push(new Tropa(1500, 100, 4, 80, 1))
+      mana -= 12
     }
   }
 }
@@ -127,24 +147,38 @@ function UI(){
     text(game.enemyBase, windowWidth-75, windowHeight-305)
     text("Custa 6", 70, 140)
     text("Custa 14", 190, 140)
+    text("Custa 9", 310, 140)
+    text("Custa 12", 430, 140)
     stroke(0)
     if(mana>=6){
-      fill(255)
+      fill(0,255,0)
     }else{
       noFill()
     }
     rect(70, 30, 80, 80)
     if(mana>=14){
-      fill(255)
+      fill(0,255,0)
     }else{
       noFill()
     }
     rect(190, 30, 80, 80)
+    if(mana>=9){
+      fill(0,255,0)
+    }else{
+      noFill()
+    }
+    rect(310, 30, 80, 80)
+    if(mana>=12){
+      fill(0,255,0)
+    }else{
+      noFill()
+    }
+    rect(430, 30, 80, 80)
     noStroke()
-    fill(0,153,76)
-    circle(110, 70, 80)
-    fill(0,51,152)
-    circle(230, 70, 80)
+    image(warrior, 70, 30, 80, 80, 152, ALLY_WARRIOR_WALKING, 80, 80)
+    image(archer, 190, 30, 80, 80, 152, ALLY_ARCHER_WALKING, 80, 80)
+    image(spearman, 310, 30, 80, 80, -10, ALLY_SPEARMAN_WALKING, 80, 80)
+    image(shieldman, 430, 30, 80, 80, -10, ALLY_SHIELDMAN_WALKING, 80, 80)
 }
 
 function spawn(){
