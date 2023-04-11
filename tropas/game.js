@@ -36,7 +36,7 @@ class Game1{
             this.enemyBase -= this.allies[i].damage
             this.allies.splice(i, 1)
           }
-          if (this.enemies.length>0){
+          else if (this.enemies.length>0){
             if(dist(this.allies[i].x, windowHeight - 40 - 100, this.enemies[0].x, windowHeight - 40 - 100) <= this.allies[i].range){
               console.log("slashing")
               this.allies[i].slash()
@@ -75,7 +75,7 @@ class Game1{
             this.allyBase -= this.enemies[i].damage
             this.enemies.splice(i, 1)
           }
-          if (this.allies.length>0){
+          else if (this.allies.length>0){
             if(dist(this.enemies[i].x, windowHeight - 40 - 100, this.allies[0].x, windowHeight - 40 - 100) <= this.enemies[i].range){
               this.allies[0].takeDamage(this.enemies[i].damage/60)
               this.enemies[i].slash()
