@@ -46,8 +46,8 @@ let totalFrameCounter = 0;
 
 
 function preload(){
-  back = loadImage('assets/back.jpg')
-
+  back = loadImage('assets/sprites/backs/back1.jpg')
+  allyBase = loadImage('assets/sprites/AllyPortal.png')
   lichKing = loadImage('assets/sprites/LichKing.png')
   warrior = loadImage('assets/sprites/Warrior.png')
   shieldman = loadImage('assets/sprites/Shieldman.png')
@@ -122,14 +122,15 @@ function keyPressed(){
 function drawBases(){
   stroke(0)
   fill(0,51,25)
-  rect(0,windowHeight-500,100,400)
+  image(allyBase, 48, windowHeight-85-192, 192, 192, ((Math.floor(current_frame/2)%8) *64) + 16, 0, 64, 64)
+  //rect(0,windowHeight-500,100,400)
   rect(windowWidth-100, windowHeight-500, windowWidth, 400)
 }
 
 function drawLife(){
   stroke(0)
   fill(255,0,0)
-  rect(0,windowHeight-530, 100, 30)
+  rect(56,windowHeight-272, 80, 30)
   rect(windowWidth-100,windowHeight-530, windowWidth, 30)
 }
 
@@ -143,7 +144,7 @@ function UI(){
     text(Math.trunc(enemyMana), windowWidth-50, 30)
     text(enemiesOnHold.length, windowWidth-50, 50)
     text(enemyTimer, windowWidth-50, 70)
-    text(game.allyBase, 25, windowHeight-305)
+    text(game.allyBase, 72, windowHeight-250)
     text(game.enemyBase, windowWidth-75, windowHeight-305)
     text("Custa 6", 70, 140)
     text("Custa 14", 190, 140)
@@ -221,6 +222,7 @@ function draw() {
     enemyMana += 0.035 
     game.fight()
     game.display()
+    displayLichKing(allyTimer)
     if(game.enemyBase <= 0){
       isRunning = "victory"
     }

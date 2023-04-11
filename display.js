@@ -1,5 +1,9 @@
 //Constantes dos sprites
 
+//Lich King
+const ALLY_LICH_KING = 192
+const ALLY_LICH_KING_FRAMES = 7 
+
 //Allies
 
 //Ally Warrior
@@ -51,6 +55,10 @@ const ENEMY_WARRIOR_WALKING = 576
 const ENEMY_WARRIOR_WALKING_FRAMES = 9
 const ENEMY_WARRIOR_SLASH = 1504
 const ENEMY_WARRIOR_SLASH_FRAMES = 6
+
+function displayLichKing(timer){
+  image(lichKing, 0, windowHeight - 74 - 128, 128, 128, ((((Math.floor(timer/10))%6)+1)*64)+8, ALLY_LICH_KING, 64, 64)
+}
 
 function display_troops(troop){
     noStroke()
@@ -176,10 +184,10 @@ function display_troops(troop){
     //argumentos da imagem: sprite, imagemX, imagemY, esses 6 ultimos argumentos deixa fixo
     //o imgW seleciona o frame atual da animacao
     //o imgH seleciona qual é animacao, elas estão descritas no sketch.js
-    image(troop_sprite, troop.x -64, windowHeight - 40 - 100 - 128, 128, 128, imgW , imgH, 64, 64);
+    image(troop_sprite, troop.x -64, windowHeight - 74 - 128, 128, 128, imgW , imgH, 64, 64);
     fill(255,0,0)
-    rect(troop.x-40, windowHeight-200-64, 80, 20)
+    rect(troop.x-40, windowHeight-140-64, 80, 20)
     fill(255)
     textSize(12)
-    text(Math.trunc(troop.life), troop.x-10, windowHeight-185-64)
+    text(Math.trunc(troop.life), troop.x-10, windowHeight-190)
   }

@@ -9,7 +9,7 @@ class Tropa{
     this.side = side
     this.current_frame = 0
     if(side == 1){
-      this.x = 60
+      this.x = 120
     }else{
       this.x = windowWidth - 60
     }
