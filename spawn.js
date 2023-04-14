@@ -59,12 +59,78 @@ function spawnEasy(game)
 
 function spawnMedium(game)
 {
-    //todo
+    var enemiesAlive = game.enemies.length;
+    var shouldSpawn = false;
+
+    if (enemiesTotalCount < easyMaxSpawn)
+    {
+        if (enemiesAlive < 4)
+        {
+            shouldSpawn = true;
+        }
+    }    
+    
+    if (totalFrameCounter % 100 != 0) return
+
+    //no inicio evitar spawnar mt rapido
+    if (enemiesTotalCount < 4 && enemiesTotalCount != 0)
+    {
+        firstSpawnDelay++;
+        if (firstSpawnDelay < 200)
+        {
+            shouldSpawn == false;
+        }
+        else
+        {
+            firstSpawnDelay = 0;
+        }
+
+    }
+
+    if (!shouldSpawn) return;
+
+    var tipo = Math.floor(Math.random() * 4) + 1;
+
+    addTroopByType(game, tipo)
+    enemiesTotalCount++
 }
 
 function spawnHard(game)
 {
-    //todo
+    var enemiesAlive = game.enemies.length;
+    var shouldSpawn = false;
+
+    if (enemiesTotalCount < easyMaxSpawn)
+    {
+        if (enemiesAlive < 5)
+        {
+            shouldSpawn = true;
+        }
+    }    
+    
+    if (totalFrameCounter % 100 != 0) return
+
+    //no inicio evitar spawnar mt rapido
+    if (enemiesTotalCount < 5 && enemiesTotalCount != 0)
+    {
+        firstSpawnDelay++;
+        if (firstSpawnDelay < 200)
+        {
+            shouldSpawn == false;
+        }
+        else
+        {
+            firstSpawnDelay = 0;
+        }
+
+    }
+
+    if (!shouldSpawn) return;
+
+    var tipo = Math.floor(Math.random() * 4) + 1;
+
+    addTroopByType(game, tipo)
+    enemiesTotalCount++
 }
 
 function addTroopByType(game, tipo)
