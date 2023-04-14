@@ -105,19 +105,19 @@ function keyPressed(){
         mana -= 6
       }
     }
-    if (keyCode === 87){
+    if (keyCode === 82){
       if(mana >= 14){
         tropasOnHold.push(new Tropa(300, 200, 2, 240, 1))
         mana -= 14
       }
     }
-    if (keyCode === 69){
+    if (keyCode === 87){
       if(mana >= 9){
         tropasOnHold.push(new Tropa(300, 300, 3, 160, 1))
         mana -= 9
       }
     }
-    if (keyCode === 82){
+    if (keyCode === 69){
       if(mana >= 12){
         tropasOnHold.push(new Tropa(1500, 100, 4, 80, 1))
         mana -= 12
@@ -198,9 +198,9 @@ function UI(){
     text(game.allyBase, 72, windowHeight-250)
     text(game.enemyBase, windowWidth-75, windowHeight-305)
     text("Custa 6", 70, 140)
-    text("Custa 14", 190, 140)
-    text("Custa 9", 310, 140)
-    text("Custa 12", 430, 140)
+    text("Custa 9", 190, 140)
+    text("Custa 12", 310, 140)
+    text("Custa 14", 430, 140)
     stroke(0)
     if(mana>=6){
       fill(0,255,0)
@@ -213,24 +213,24 @@ function UI(){
     }else{
       noFill()
     }
-    rect(190, 30, 80, 80)
+    rect(430, 30, 80, 80)
     if(mana>=9){
       fill(0,255,0)
     }else{
       noFill()
     }
-    rect(310, 30, 80, 80)
+    rect(190, 30, 80, 80)
     if(mana>=12){
       fill(0,255,0)
     }else{
       noFill()
     }
-    rect(430, 30, 80, 80)
+    rect(310, 30, 80, 80)
     noStroke()
     image(warrior, 70, 30, 80, 80, 152, ALLY_WARRIOR_WALKING, 80, 80)
-    image(archer, 190, 30, 80, 80, 152, ALLY_ARCHER_WALKING, 80, 80)
-    image(spearman, 310, 30, 80, 80, -10, ALLY_SPEARMAN_WALKING, 80, 80)
-    image(shieldman, 430, 30, 80, 80, -10, ALLY_SHIELDMAN_WALKING, 80, 80)
+    image(archer, 430, 30, 80, 80, 152, ALLY_ARCHER_WALKING, 80, 80)
+    image(spearman, 190, 30, 80, 80, -10, ALLY_SPEARMAN_WALKING, 80, 80)
+    image(shieldman, 310, 30, 80, 80, -10, ALLY_SHIELDMAN_WALKING, 80, 80)
 }
 
 function spawn(){
@@ -293,6 +293,7 @@ function draw() {
     background(255)
     drawChooseLevel()
   }else{
+    background(255)
     stroke(0)
     fill(0)
     if ( isRunning == "victory"){
