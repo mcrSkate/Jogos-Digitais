@@ -1,5 +1,6 @@
 var game
-var isRunning = "playing"
+var isRunning = "Menu"
+var level = 0
 let tropasOnHold = []
 let enemiesOnHold = []
 let allyTimer = 0
@@ -46,6 +47,7 @@ let totalFrameCounter = 0;
 
 
 function preload(){
+  menuBack = loadImage('assets/menuBack.jpg')
   back = loadImage('assets/sprites/backs/back1.jpg')
   allyBase = loadImage('assets/sprites/AllyPortal.png')
   enemyBase = loadImage('assets/sprites/EnemyPortal.png')
@@ -94,28 +96,32 @@ function setup() {
 
 function keyPressed(){
   console.log(keyCode)
-  if (keyCode === 81){
-    if(mana >= 6){  
-      tropasOnHold.push(new Tropa(700, 300, 1, 80, 1))
-      mana -= 6
+  if (isRunning == "Menu"){
+    isRunning = "LevelSelect"
+  }else{
+    if (keyCode === 81){
+      if(mana >= 6){  
+        tropasOnHold.push(new Tropa(700, 300, 1, 80, 1))
+        mana -= 6
+      }
     }
-  }
-  if (keyCode === 87){
-    if(mana >= 14){
-      tropasOnHold.push(new Tropa(300, 200, 2, 240, 1))
-      mana -= 14
+    if (keyCode === 87){
+      if(mana >= 14){
+        tropasOnHold.push(new Tropa(300, 200, 2, 240, 1))
+        mana -= 14
+      }
     }
-  }
-  if (keyCode === 69){
-    if(mana >= 9){
-      tropasOnHold.push(new Tropa(300, 300, 3, 160, 1))
-      mana -= 9
+    if (keyCode === 69){
+      if(mana >= 9){
+        tropasOnHold.push(new Tropa(300, 300, 3, 160, 1))
+        mana -= 9
+      }
     }
-  }
-  if (keyCode === 82){
-    if(mana >= 12){
-      tropasOnHold.push(new Tropa(1500, 100, 4, 80, 1))
-      mana -= 12
+    if (keyCode === 82){
+      if(mana >= 12){
+        tropasOnHold.push(new Tropa(1500, 100, 4, 80, 1))
+        mana -= 12
+      }
     }
   }
 }
@@ -136,7 +142,50 @@ function drawLife(){
   rect(windowWidth-100,windowHeight-325, 90, 30)
 }
 
+function drawChooseLevel(){
+  stroke(0)
+  fill(0)
+  textSize(60)
+  text("Escolha o nível", windowWidth/2-200, windowHeight/2 - 140)
+  textSize(20)
+  fill(255)
+  rect(windowWidth/2-60, windowHeight/2 -20, 120, 40)
+  rect(windowWidth/2-60, windowHeight/2 +25, 120, 40)
+  rect(windowWidth/2-60, windowHeight/2 +70, 120, 40)
+  fill(0)
+  text("Nível 1", windowWidth/2-30, windowHeight/2+5)
+  text("Nível 2", windowWidth/2-30, windowHeight/2+50)
+  text("Nível 3", windowWidth/2-30, windowHeight/2+95)
+  
+}
+
+function mouseClicked(){
+  if (isRunning == "LevelSelect"){
+    console.log(mouseX, mouseY)
+    if(mouseX>=windowWidth/2-60 && mouseX<= windowWidth/2+60){
+      if(mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+20){
+        level = 1
+        print("a")
+      }else 
+      if(mouseY>=windowHeight/2+25 && mouseY<=windowHeight/2+65){
+        level = 2
+      }else 
+      if(mouseY>=windowHeight/2-70 && mouseY<=windowHeight/2+110){
+        level = 3
+      }
+    }
+    if(level!=0){ 
+      isRunning = "playing"
+    }
+    console.log(isRunning)
+  }
+}
+
 function UI(){
+    stroke(0)
+    fill(255,255,0)
+    textSize(30)
+    text("Nível " + level, windowWidth/2-60, 30)
     stroke(255,0,0)
     fill(0,255,0)
     textSize(20)
@@ -206,31 +255,43 @@ function spawn(){
 
 let current_frame = 0;
 function draw() {
-  image(back, 0, 0, windowWidth, windowHeight)
-  if (frameCounter == 6){
-    current_frame += 1;
-    frameCounter = 0;
-  }
-  frameCounter++;
-  totalFrameCounter++;
   if (isRunning == "playing"){
-    stroke(0)
-    drawBases()
-    drawLife()
-    UI()
-    spawn()
-    spawnEnemies(game,"easy")
-    mana += 0.035
-    enemyMana += 0.035 
-    game.fight()
-    game.display()
-    displayLichKing(allyTimer)
-    if(game.enemyBase <= 0){
-      isRunning = "victory"
-    }
-    if(game.allyBase <= 0){
-      isRunning = "Defeat"
-    }
+      image(back, 0, 0, windowWidth, windowHeight)
+      
+      if (frameCounter == 6){
+        current_frame += 1;
+        frameCounter = 0;
+      }
+      frameCounter++;
+      totalFrameCounter++;
+      stroke(0)
+      drawBases()
+      drawLife()
+      UI()
+      spawn()
+      if(level == 1){
+        spawnEnemies(game,"easy")
+      }else if(level == 2){
+        spawnEnemies(game,"medium")
+      }else{
+        spawnEnemies(game,"hard")
+      }
+      mana += 0.035
+      enemyMana += 0.035 
+      game.fight()
+      game.display()
+      displayLichKing(allyTimer)
+      if(game.enemyBase <= 0){
+        isRunning = "victory"
+      }
+      if(game.allyBase <= 0){
+        isRunning = "Defeat"
+      }
+  }else if(isRunning == "Menu"){
+    image(menuBack, 0, 0, windowWidth, windowHeight)
+  }else if(isRunning == "LevelSelect"){
+    background(255)
+    drawChooseLevel()
   }else{
     stroke(0)
     fill(0)
