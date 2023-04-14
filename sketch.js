@@ -48,6 +48,7 @@ let totalFrameCounter = 0;
 function preload(){
   back = loadImage('assets/sprites/backs/back1.jpg')
   allyBase = loadImage('assets/sprites/AllyPortal.png')
+  enemyBase = loadImage('assets/sprites/EnemyPortal.png')
   lichKing = loadImage('assets/sprites/LichKing.png')
   warrior = loadImage('assets/sprites/Warrior.png')
   shieldman = loadImage('assets/sprites/Shieldman.png')
@@ -124,14 +125,15 @@ function drawBases(){
   fill(0,51,25)
   image(allyBase, 48, windowHeight-85-192, 192, 192, ((Math.floor(current_frame/2)%8) *64) + 16, 0, 64, 64)
   //rect(0,windowHeight-500,100,400)
-  rect(windowWidth-100, windowHeight-500, windowWidth, 400)
+  image(enemyBase, windowWidth-186, windowHeight-85-192, 192, 192, 0, 0, 0, 0)
+  //rect(windowWidth-100, windowHeight-500, windowWidth, 400)
 }
 
 function drawLife(){
   stroke(0)
   fill(255,0,0)
   rect(56,windowHeight-272, 80, 30)
-  rect(windowWidth-100,windowHeight-530, windowWidth, 30)
+  rect(windowWidth-100,windowHeight-325, 90, 30)
 }
 
 function UI(){
@@ -185,7 +187,7 @@ function UI(){
 function spawn(){
   if (tropasOnHold.length > 0){
     allyTimer += 1
-    if(allyTimer % (120 * tropasOnHold[0].tipo) == 0){    
+    if(allyTimer % 120 == 0){    
       game.addAlly(tropasOnHold[0])
       tropasOnHold.shift()
       allyTimer = 0
