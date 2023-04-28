@@ -249,17 +249,23 @@ function UI(){
     fill(255,255,0)
     textSize(30)
     text("Nível " + level, windowWidth/2-60, 30)
-    stroke(255,0,0)
+    stroke(0)
+    fill(255)
+    rect(10, 60, 40, 50)
+    fill(0,0,255)
+    rect(10, 110-mana, 40, mana)
+    
     fill(0,255,0)
     textSize(20)
-    text(Math.trunc(mana), 10, 30)
-    text(tropasOnHold.length, 10, 50)
-    text(allyTimer, 10, 70)
-    text(Math.trunc(enemyMana), windowWidth-50, 30)
-    text(enemiesOnHold.length, windowWidth-50, 50)
-    text(enemyTimer, windowWidth-50, 70)
+    if(mana<10){
+      text(Math.trunc(mana), 25, 93)
+    }else{
+      text(Math.trunc(mana), 20, 93)
+    }
+    //text(tropasOnHold.length, 10, 50)
     text(game.allyBase, 72, windowHeight-250)
     text(game.enemyBase, windowWidth-75, windowHeight-305)
+    text("Mana", 10, 40)
     text("Custa 6", 70, 140)
     text("Custa 14", 190, 140)
     text("Custa 9", 310, 140)
@@ -289,11 +295,58 @@ function UI(){
       noFill()
     }
     rect(430, 30, 80, 80)
+    fill(255)
+    circle(150,110,30)
+    circle(270,110,30)
+    circle(390,110,30)
+    circle(510,110,30)
+    stroke(0)
+    fill(0)
+    textSize(15)
+    text("Q", 145, 115)
+    text("W", 262, 115)
+    text("E", 385, 115)
+    text("R", 505, 115)
     noStroke()
     image(warrior, 70, 30, 80, 80, 152, ALLY_WARRIOR_WALKING, 80, 80)
     image(archer, 190, 30, 80, 80, 152, ALLY_ARCHER_WALKING, 80, 80)
     image(spearman, 310, 30, 80, 80, -10, ALLY_SPEARMAN_WALKING, 80, 80)
     image(shieldman, 430, 30, 80, 80, -10, ALLY_SHIELDMAN_WALKING, 80, 80)
+    for(let i=0; i<tropasOnHold.length; i++){
+      noFill()
+      stroke(0)
+      auxImg = null
+      auxX = 0
+      auxPosition = 0
+      if(tropasOnHold[i].tipo==1){
+        auxImg = warrior
+        auxPosition = ALLY_WARRIOR_WALKING
+        auxX = 152
+      }
+      else if(tropasOnHold[i].tipo==2){
+        auxImg = archer
+        auxPosition = ALLY_ARCHER_WALKING
+        auxX = 152
+      }
+      else if(tropasOnHold[i].tipo==3){
+        auxImg = spearman
+        auxPosition = ALLY_SPEARMAN_WALKING
+        auxX = -10
+      }
+      else{
+        auxImg = shieldman
+        auxPosition = ALLY_SHIELDMAN_WALKING
+        auxX = -10
+      }
+      console.log(auxImg, auxPosition)
+      rect(windowWidth/2 + 50*i, 40 + 50*Math.floor(i/16), 40, 40)
+      if(i == 0){
+        fill(0,255,0)
+        rect(windowWidth/2, 40 + 40-allyTimer/3, 40, allyTimer/3)
+      }
+      noStroke()
+      image(auxImg, windowWidth/2 + 50*i, 40 + 50*Math.floor(i/16), 40, 40, auxX, auxPosition, 80, 80)
+    }
 }
 
 function menuReturnButton(){
@@ -323,6 +376,22 @@ function spawn(){
   //     enemyTimer = 0
   //   }
   // }
+}
+
+function resetAll(){
+  level = 0
+  game = new Game1()
+  firstSpawnDelay = 0
+  enemiesTotalCount = 0
+  frameCounter = 0
+  totalFrameCounter = 0
+  mana = 0
+  enemyMana = 0
+  tropasOnHold = []
+  enemiesOnHold = []
+  allyTimer = 0
+  enemyTimer = 0
+  actualEnemy = 0
 }
 
 let current_frame = 0;
@@ -363,7 +432,7 @@ function draw() {
       if (level== 6){
         spawnEnemies(game,"hard")
       }
-      mana += 0.035
+      mana = Math.min(mana+0.035, 50)
       enemyMana += 0.035 
       game.fight()
       game.display()
@@ -371,13 +440,11 @@ function draw() {
       if(game.enemyBase <= 0){
         isRunning = "victory"
         maxLevel = Math.min(maxLevel+1, 6)
-        level = 0
-        game = new Game1()
+        resetAll()
       }
       if(game.allyBase <= 0){
         isRunning = "defeat"
-        level = 0
-        game = new Game1()
+        resetAll()
       }
   }else if(isRunning == "Menu"){
     image(menuBack, 0, 0, windowWidth, windowHeight)
