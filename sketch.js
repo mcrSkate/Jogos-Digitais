@@ -1,6 +1,7 @@
 var game
 var isRunning = "Menu"
 var level = 0
+var maxLevel = 1
 let tropasOnHold = []
 let enemiesOnHold = []
 let allyTimer = 0
@@ -48,9 +49,12 @@ let totalFrameCounter = 0;
 
 function preload(){
   menuBack = loadImage('assets/menuBack.jpg')
-  back = loadImage('assets/sprites/backs/back1.jpg')
-  back2 = loadImage('assets/sprites/backs/back3.jpg')
-  back3 = loadImage('assets/sprites/backs/back5.jpg')
+  back1 = loadImage('assets/sprites/backs/back1.jpeg')
+  back2 = loadImage('assets/sprites/backs/back2.jpeg')
+  back3 = loadImage('assets/sprites/backs/back3.jpg')
+  back4 = loadImage('assets/sprites/backs/back4.jpg')
+  back5 = loadImage('assets/sprites/backs/back5.jpg')
+  back6 = loadImage('assets/sprites/backs/back6.jpeg')
   allyBase = loadImage('assets/sprites/AllyPortal.png')
   enemyBase = loadImage('assets/sprites/EnemyPortal.png')
   lichKing = loadImage('assets/sprites/LichKing.png')
@@ -58,10 +62,26 @@ function preload(){
   shieldman = loadImage('assets/sprites/Shieldman.png')
   spearman = loadImage('assets/sprites/Spearman.png')
   archer = loadImage('assets/sprites/Archer.png')
-  enemyWarrior = loadImage('assets/sprites/Azul/Machado.png')
-  enemyShieldman = loadImage('assets/sprites/Azul/Escudo.png')
-  enemySpearman = loadImage('assets/sprites/Azul/Pá.png')
-  enemyArcher = loadImage('assets/sprites/Azul/Estilingue.png')
+  blueEnemyWarrior = loadImage('assets/sprites/Azul/Machado.png')
+  blueEnemyShieldman = loadImage('assets/sprites/Azul/Escudo.png')
+  blueEnemySpearman = loadImage('assets/sprites/Azul/Pá.png')
+  blueEnemyArcher = loadImage('assets/sprites/Azul/Estilingue.png')
+  yellowEnemyWarrior = loadImage('assets/sprites/Amarelo/Machado.png')
+  yellowEnemyShieldman = loadImage('assets/sprites/Amarelo/Escudo.png')
+  yellowEnemySpearman = loadImage('assets/sprites/Amarelo/Pá.png')
+  yellowEnemyArcher = loadImage('assets/sprites/Amarelo/Estilingue.png')
+  greenEnemyWarrior = loadImage('assets/sprites/Verde/Machado.png')
+  greenEnemyShieldman = loadImage('assets/sprites/Verde/Escudo.png')
+  greenEnemySpearman = loadImage('assets/sprites/Verde/Pá.png')
+  greenEnemyArcher = loadImage('assets/sprites/Verde/Estilingue.png')
+  brownEnemyWarrior = loadImage('assets/sprites/Marrom/Machado.png')
+  brownEnemyShieldman = loadImage('assets/sprites/Marrom/EscudoPrata.png')
+  brownEnemySpearman = loadImage('assets/sprites/Marrom/Pá.png')
+  brownEnemyArcher = loadImage('assets/sprites/Marrom/Estilingue.png')
+  redEnemyWarrior = loadImage('assets/sprites/Vermelho/Machado.png')
+  redEnemyShieldman = loadImage('assets/sprites/Vermelho/Escudo.png')
+  redEnemySpearman = loadImage('assets/sprites/Vermelho/Pá.png')
+  redEnemyArcher = loadImage('assets/sprites/Vermelho/Estilingue.png')
 }
 
 function setup() {
@@ -151,35 +171,76 @@ function drawChooseLevel(){
   text("Escolha o nível", windowWidth/2-200, windowHeight/2 - 140)
   textSize(20)
   fill(255)
-  rect(windowWidth/2-60, windowHeight/2 -20, 120, 40)
-  rect(windowWidth/2-60, windowHeight/2 +25, 120, 40)
+  if (maxLevel>=1)
+    rect(windowWidth/2-60, windowHeight/2 -20, 120, 40)
+  if (maxLevel>=2)
+    rect(windowWidth/2-60, windowHeight/2 +25, 120, 40)
+  if (maxLevel>=3)
   rect(windowWidth/2-60, windowHeight/2 +70, 120, 40)
+  if (maxLevel>=4)
+    rect(windowWidth/2-60, windowHeight/2 +115, 120, 40)
+  if (maxLevel>=5)
+  rect(windowWidth/2-60, windowHeight/2 +160, 120, 40)
   fill(0)
+  if (maxLevel>=1)
   text("Nível 1", windowWidth/2-30, windowHeight/2+5)
+  if (maxLevel>=2)
   text("Nível 2", windowWidth/2-30, windowHeight/2+50)
+  if (maxLevel>=3)
   text("Nível 3", windowWidth/2-30, windowHeight/2+95)
-  
+  if (maxLevel>=4)
+  text("Nível 4", windowWidth/2-30, windowHeight/2+140)
+  if (maxLevel>=5)
+  text("Nível 5", windowWidth/2-30, windowHeight/2+185)
 }
 
 function mouseClicked(){
   if (isRunning == "LevelSelect"){
     console.log(mouseX, mouseY)
     if(mouseX>=windowWidth/2-60 && mouseX<= windowWidth/2+60){
-      if(mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+20){
+      if(mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+20 && maxLevel>=1){
         level = 1
+        enemyWarrior = blueEnemyWarrior
+        enemyArcher = blueEnemyArcher
+        enemySpearman = blueEnemySpearman
+        enemyShieldman = blueEnemyShieldman
         print("a")
       }else 
-      if(mouseY>=windowHeight/2+25 && mouseY<=windowHeight/2+65){
+      if(mouseY>=windowHeight/2+25 && mouseY<=windowHeight/2+65 && maxLevel>=2){
         level = 2
+        enemyWarrior = yellowEnemyWarrior
+        enemyArcher = yellowEnemyArcher
+        enemySpearman = yellowEnemySpearman
+        enemyShieldman = yellowEnemyShieldman
       }else 
-      if(mouseY>=windowHeight/2-70 && mouseY<=windowHeight/2+110){
+      if(mouseY>=windowHeight/2+70 && mouseY<=windowHeight/2+110 && maxLevel>=3){
         level = 3
+        enemyWarrior = greenEnemyWarrior
+        enemyArcher = greenEnemyArcher
+        enemySpearman = greenEnemySpearman
+        enemyShieldman = greenEnemyShieldman
+      }else if(mouseY>=windowHeight/2+115 && mouseY<=windowHeight/2+155 && maxLevel>=4){
+        level = 4
+        enemyWarrior = brownEnemyWarrior
+        enemyArcher = brownEnemyArcher
+        enemySpearman = brownEnemySpearman
+        enemyShieldman = brownEnemyShieldman
+      }else if(mouseY>=windowHeight/2+160 && mouseY<=windowHeight/2+200 && maxLevel>=5){
+        level = 5
+        enemyWarrior = redEnemyWarrior
+        enemyArcher = redEnemyArcher
+        enemySpearman = redEnemySpearman
+        enemyShieldman = redEnemyShieldman
       }
     }
     if(level!=0){ 
       isRunning = "playing"
     }
     console.log(isRunning)
+  }else if(isRunning=="victory" || isRunning=="defeat"){
+    if(mouseX>=windowWidth-200 && mouseX<=windowWidth && mouseY>=0 && mouseY<=40){
+      isRunning = "LevelSelect"
+    }
   }
 }
 
@@ -235,6 +296,15 @@ function UI(){
     image(shieldman, 430, 30, 80, 80, -10, ALLY_SHIELDMAN_WALKING, 80, 80)
 }
 
+function menuReturnButton(){
+  stroke(0)
+  fill(255)
+  rect(windowWidth-200, 0, 200, 40)
+  textSize(20)
+  fill(0)
+  text("Escolher Nível", windowWidth-180, 20)
+}
+
 function spawn(){
   if (tropasOnHold.length > 0){
     allyTimer += 1
@@ -257,13 +327,20 @@ function spawn(){
 
 let current_frame = 0;
 function draw() {
+  console.log(isRunning)
   if (isRunning == "playing"){
       if (level == 1){
-        image(back, 0, 0, windowWidth, windowHeight)
+        image(back1, 0, 0, windowWidth, windowHeight)
       }else if (level == 2){
         image(back2, 0, 0, windowWidth, windowHeight)
-      } else{
+      } else if (level == 3){
         image(back3, 0, 0, windowWidth, windowHeight)
+      } else if (level == 4){
+        image(back4, 0, 0, windowWidth, windowHeight)
+      } else if (level == 5){
+        image(back5, 0, 0, windowWidth, windowHeight)
+      } else{
+        image(back6, 0, 0, windowWidth, windowHeight)
       }
       
       if (frameCounter == 6){
@@ -277,13 +354,13 @@ function draw() {
       drawLife()
       UI()
       spawn()
-      if(level == 1){
+      if(level == 1 || level == 2 || level == 3){
         spawnEnemies(game,"easy")
       }
-      if(level == 2){
+      if(level == 4 || level == 5){
         spawnEnemies(game,"medium")
       }
-      if (level==3){
+      if (level== 6){
         spawnEnemies(game,"hard")
       }
       mana += 0.035
@@ -293,9 +370,14 @@ function draw() {
       displayLichKing(allyTimer)
       if(game.enemyBase <= 0){
         isRunning = "victory"
+        maxLevel = Math.min(maxLevel+1, 6)
+        level = 0
+        game = new Game1()
       }
       if(game.allyBase <= 0){
-        isRunning = "Defeat"
+        isRunning = "defeat"
+        level = 0
+        game = new Game1()
       }
   }else if(isRunning == "Menu"){
     image(menuBack, 0, 0, windowWidth, windowHeight)
@@ -304,11 +386,14 @@ function draw() {
     drawChooseLevel()
   }else{
     background(255)
+    menuReturnButton()
     stroke(0)
     fill(0)
-    if ( isRunning == "victory"){
+
+    if(isRunning == "victory"){
       text("Vitória", windowWidth/2, windowHeight/2)
-    }else{
+    }
+    if(isRunning == "defeat"){
       text("Derrota", windowWidth/2, windowHeight/2)
     }
   }
