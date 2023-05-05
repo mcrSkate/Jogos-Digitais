@@ -2,6 +2,7 @@ class Tropa{
   
   constructor(life, damage, tipo, range, side){
     this.life = life
+    this.max_life = life
     this.damage = damage
     this.tipo = tipo
     this.speed = 1.5

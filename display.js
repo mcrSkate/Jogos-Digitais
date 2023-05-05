@@ -184,10 +184,10 @@ function display_troops(troop){
     //argumentos da imagem: sprite, imagemX, imagemY, esses 6 ultimos argumentos deixa fixo
     //o imgW seleciona o frame atual da animacao
     //o imgH seleciona qual é animacao, elas estão descritas no sketch.js
+    stroke(0)
     image(troop_sprite, troop.x -64, windowHeight - 74 - 128, 128, 128, imgW , imgH, 64, 64);
-    fill(255,0,0)
+    fill(128)
     rect(troop.x-40, windowHeight-140-64, 80, 20)
-    fill(255)
-    textSize(12)
-    text(Math.trunc(troop.life), troop.x-10, windowHeight-190)
+    fill(255,0,0)
+    rect(troop.x-40, windowHeight-140-64, 80 * troop.life/troop.max_life, 20)
   }

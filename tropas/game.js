@@ -1,7 +1,7 @@
 class Game1{
-  constructor(){
-    this.enemyBase = 2000
-    this.allyBase = 2000
+  constructor(life){
+    this.enemyBase = 3
+    this.allyBase = life
     this.allies = []
     this.enemies = []
   }
@@ -33,7 +33,7 @@ class Game1{
         if(this.allies.length>0){
           if(this.allies[i].x+this.allies[i].range >= windowWidth-60){
             this.allies[i].slash()
-            this.enemyBase -= this.allies[i].damage
+            this.enemyBase -= 1
             this.allies.splice(i, 1)
           }
           else if (this.enemies.length>0){
@@ -72,7 +72,7 @@ class Game1{
         if(this.enemies.length>0){
           if(this.enemies[i].x-this.enemies[i].range <= 60){
             this.enemies[i].slash()
-            this.allyBase -= this.enemies[i].damage
+            this.allyBase -= 1
             this.enemies.splice(i, 1)
           }
           else if (this.allies.length>0){
