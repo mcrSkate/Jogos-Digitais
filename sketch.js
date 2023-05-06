@@ -286,6 +286,7 @@ function mouseClicked(){
     if(mouseX>=3*windowWidth/29 && mouseX<=6*windowWidth/29 && mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+130 && !upgrades[0] && !showNextLevel){
       upgrades[0] = true
       showNextLevel = !showNextLevel
+      game.allyBase++
       currentMaxLife++
     }
     if(mouseX>=8*windowWidth/29 && mouseX<=11*windowWidth/29 && mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+130 && !upgrades[1] && !showNextLevel){
