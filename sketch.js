@@ -1,6 +1,7 @@
 var game
 var isRunning = "Menu"
 var level = 0
+var lastLevel = 0
 var maxLevel = 1
 var currentMaxLife = 3
 let tropasOnHold = []
@@ -8,12 +9,19 @@ let enemiesOnHold = []
 let allyTimer = 0
 let enemyTimer = 0
 let mana = 0
+let maxMana = 50
+let castTime = 120
 let enemyMana = 0
 let actualEnemy = 0
 let img
 let canvas
-let upgrades = [false,false,false,false,false] //maxHeart, maxMana, manaRegen, castTime, newSkill
+let manaRegen = 0.035
+var upgrades = [false,false,false,false,false] //maxHeart, maxMana, manaRegen, castTime, newSkill
 let handsCounter = 0
+let handsAnimation = 0
+let showNextLevel = true
+var paralyzed = false
+let hideMenu = true
 
 //Entities
 let lichKing
@@ -26,31 +34,18 @@ let enemyArcher
 let enemySpearman
 let enemyShieldman
 
-//for animations
-//spellcast
-const spellcast= 64;
-const spellcast_frames = 7;
-//thrust
-const thrust = 320;
-const thurst_frames = 8;
-//walk
-const walking = 576;
-const walking_frames = 9;
-const warrior_walking = 1504;
-const archer_walking = 1504
-//slash
-const slash = 832;
-const slash_frames = 9;
-const warrior_slash = 2016;
-const warrior_slash_frames = 6;
-//shoot
-const shoot = 1088;
-const shoot_frames = 13;
 let frameCounter = 0;
 let totalFrameCounter = 0;
 
 //Colors
+const BACKGROUND_COLOR = 'rgb(248,241,235)'
 const PINK = 'rgb(255,0,137)'
+const BLACK_PINK = 'rgb(51,0,25)'
+const DARK_GREEN = 'rgb(30,150,159)'
+const BLACK_GREEN = 'rgb(0,33,33)'
+const LIGHT_BLUE = 'rgb(0,128,255)'
+const BLACK_BLUE = 'rgb(0,0,51)'
+const DARK_RED = 'rgb(51,0,0)'
 
 var hands = []
 
@@ -89,6 +84,10 @@ function preload(){
   redEnemyShieldman = loadImage('assets/sprites/Vermelho/Escudo.png')
   redEnemySpearman = loadImage('assets/sprites/Vermelho/Pá.png')
   redEnemyArcher = loadImage('assets/sprites/Vermelho/Estilingue.png')
+  castleEnemyWarrior = loadImage('assets/sprites/Castle/Warrior.png')
+  castleEnemyShieldman = loadImage('assets/sprites/Castle/Shieldman.png')
+  castleEnemySpearman = loadImage('assets/sprites/Castle/Spearman.png')
+  castleEnemyArcher = loadImage('assets/sprites/Castle/Archer.png')
   hands[0] = loadImage('assets/sprites/hands/hands0.png')
   hands[1] = loadImage('assets/sprites/hands/hands1.png')
   hands[2] = loadImage('assets/sprites/hands/hands2.png')
@@ -103,6 +102,9 @@ function preload(){
   hands[11] = loadImage('assets/sprites/hands/hands11.png')
   hands[12] = loadImage('assets/sprites/hands/hands12.png')
   hands[13] = loadImage('assets/sprites/hands/hands13.png')
+  tombstone = loadImage('assets/sprites/tombstone.png')
+  locker = loadImage('assets/sprites/locker.png')
+  zombieHand = loadImage('assets/sprites/hands/zombieHand.png')
 }
 
 function setup() {
@@ -166,6 +168,15 @@ function keyPressed(){
         mana -= 12
       }
     }
+    if (keyCode === 84){
+      if(mana >= 25 && upgrades[4]){
+        paralyzed = !paralyzed
+        mana -= 25
+      }
+    }
+    if (keyCode === 88){
+      hideMenu = !hideMenu
+    }
   }
 }
 
@@ -179,40 +190,46 @@ function drawBases(){
 }
 
 function drawChooseLevel(){
-  stroke(0)
-  fill(0)
+  strokeWeight(3)
+  stroke(DARK_GREEN)
+  fill(DARK_GREEN)
   textSize(60)
   text("Select a level", windowWidth/2-180, windowHeight/2 - 140)
+  strokeWeight(1)
   textSize(20)
-  fill(255)
+  fill(BACKGROUND_COLOR)
   if (maxLevel>=1)
-    rect(windowWidth/2-60, windowHeight/2 -20, 120, 40)
+    rect(windowWidth/2-60, windowHeight/2 -85, 120, 40)
   if (maxLevel>=2)
-    rect(windowWidth/2-60, windowHeight/2 +25, 120, 40)
+    rect(windowWidth/2-60, windowHeight/2 -40, 120, 40)
   if (maxLevel>=3)
-  rect(windowWidth/2-60, windowHeight/2 +70, 120, 40)
+    rect(windowWidth/2-60, windowHeight/2 +5, 120, 40)
   if (maxLevel>=4)
-    rect(windowWidth/2-60, windowHeight/2 +115, 120, 40)
+    rect(windowWidth/2-60, windowHeight/2 +50, 120, 40)
   if (maxLevel>=5)
-  rect(windowWidth/2-60, windowHeight/2 +160, 120, 40)
-  fill(0)
+    rect(windowWidth/2-60, windowHeight/2 +95, 120, 40)
+  if (maxLevel>=6)
+    rect(windowWidth/2-60, windowHeight/2 +140, 120, 40)
+  fill(DARK_GREEN)
   if (maxLevel>=1)
-  text("Level 1", windowWidth/2-30, windowHeight/2+5)
+  text("Level 1", windowWidth/2-30, windowHeight/2-60)
   if (maxLevel>=2)
-  text("Level 2", windowWidth/2-30, windowHeight/2+50)
+  text("Level 2", windowWidth/2-30, windowHeight/2-15)
   if (maxLevel>=3)
-  text("Level 3", windowWidth/2-30, windowHeight/2+95)
+  text("Level 3", windowWidth/2-30, windowHeight/2+30)
   if (maxLevel>=4)
-  text("Level 4", windowWidth/2-30, windowHeight/2+140)
+  text("Level 4", windowWidth/2-30, windowHeight/2+75)
   if (maxLevel>=5)
-  text("Level 5", windowWidth/2-30, windowHeight/2+185)
+  text("Level 5", windowWidth/2-30, windowHeight/2+120)
+  if (maxLevel>=5)
+  text("Level 6", windowWidth/2-30, windowHeight/2+165)
 }
 
 function mouseClicked(){
   if (isRunning == "LevelSelect"){
     console.log(mouseX, mouseY)
     if(mouseX>=windowWidth/2-60 && mouseX<= windowWidth/2+60){
-      if(mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+20 && maxLevel>=1){
+      if(mouseY>=windowHeight/2-85 && mouseY<=windowHeight/2-45 && maxLevel>=1){
         level = 1
         enemyWarrior = blueEnemyWarrior
         enemyArcher = blueEnemyArcher
@@ -220,31 +237,37 @@ function mouseClicked(){
         enemyShieldman = blueEnemyShieldman
         print("a")
       }else 
-      if(mouseY>=windowHeight/2+25 && mouseY<=windowHeight/2+65 && maxLevel>=2){
+      if(mouseY>=windowHeight/2-40 && mouseY<=windowHeight/2 && maxLevel>=2){
         level = 2
         enemyWarrior = yellowEnemyWarrior
         enemyArcher = yellowEnemyArcher
         enemySpearman = yellowEnemySpearman
         enemyShieldman = yellowEnemyShieldman
       }else 
-      if(mouseY>=windowHeight/2+70 && mouseY<=windowHeight/2+110 && maxLevel>=3){
+      if(mouseY>=windowHeight/2+5 && mouseY<=windowHeight/2+40 && maxLevel>=3){
         level = 3
         enemyWarrior = greenEnemyWarrior
         enemyArcher = greenEnemyArcher
         enemySpearman = greenEnemySpearman
         enemyShieldman = greenEnemyShieldman
-      }else if(mouseY>=windowHeight/2+115 && mouseY<=windowHeight/2+155 && maxLevel>=4){
+      }else if(mouseY>=windowHeight/2+50 && mouseY<=windowHeight/2+90 && maxLevel>=4){
         level = 4
         enemyWarrior = brownEnemyWarrior
         enemyArcher = brownEnemyArcher
         enemySpearman = brownEnemySpearman
         enemyShieldman = brownEnemyShieldman
-      }else if(mouseY>=windowHeight/2+160 && mouseY<=windowHeight/2+200 && maxLevel>=5){
+      }else if(mouseY>=windowHeight/2+95 && mouseY<=windowHeight/2+135 && maxLevel>=5){
         level = 5
         enemyWarrior = redEnemyWarrior
         enemyArcher = redEnemyArcher
         enemySpearman = redEnemySpearman
         enemyShieldman = redEnemyShieldman
+      }else if(mouseY>=windowHeight/2+140 && mouseY<=windowHeight/2+180 && maxLevel>=6){
+        level = 6
+        enemyWarrior = castleEnemyWarrior
+        enemyArcher = castleEnemyArcher
+        enemySpearman = castleEnemySpearman
+        enemyShieldman = castleEnemyShieldman
       }
     }
     if(level!=0){ 
@@ -252,77 +275,130 @@ function mouseClicked(){
     }
     console.log(isRunning)
   }else if(isRunning=="defeat"){
-    if(mouseX>=windowWidth/2-115 && mouseX<=windowWidth/2+85 && mouseY>=windowHeight/2-40 && mouseY<=windowHeight/2){
+    if(mouseX>=windowWidth/2-200 && mouseX<=windowWidth/2-50 && mouseY>=windowHeight-77 && mouseY<=windowHeight-37){
+      level = lastLevel
+      isRunning = "playing"
+    }
+    if(mouseX>=windowWidth/2+50 && mouseX<=windowWidth/2+210 && mouseY>=windowHeight-77 && mouseY<=windowHeight-37){
+      isRunning = "LevelSelect"
+    }
+  }else if(isRunning=="victory"){
+    if(mouseX>=3*windowWidth/29 && mouseX<=6*windowWidth/29 && mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+130 && !upgrades[0] && !showNextLevel){
+      upgrades[0] = true
+      showNextLevel = !showNextLevel
+      currentMaxLife++
+    }
+    if(mouseX>=8*windowWidth/29 && mouseX<=11*windowWidth/29 && mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+130 && !upgrades[1] && !showNextLevel){
+      upgrades[1] = true
+      showNextLevel = !showNextLevel
+      castTime /= 2
+    }
+    if(mouseX>=13*windowWidth/29 && mouseX<=16*windowWidth/29 && mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+130 && !upgrades[2] && !showNextLevel){
+      upgrades[2] = true
+      showNextLevel = !showNextLevel
+      maxMana += 25
+    }
+    if(mouseX>=18*windowWidth/29 && mouseX<=21*windowWidth/29 && mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+130 && !upgrades[3] && !showNextLevel){
+      upgrades[3] = true
+      showNextLevel = !showNextLevel
+      manaRegen *= 1.5
+    }
+    if(mouseX>=23*windowWidth/29 && mouseX<=26*windowWidth/29 && mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+130 && !upgrades[4] && !showNextLevel){
+      upgrades[4] = true
+      showNextLevel = !showNextLevel
+    }
+    if(mouseX>=windowWidth/2-200 && mouseX<=windowWidth/2-50 && mouseY>=windowHeight-77 && mouseY<=windowHeight-37 && showNextLevel && lastLevel!=6){
+      level = lastLevel+1
+      isRunning = "playing"
+    }
+    if(mouseX>=windowWidth/2+50 && mouseX<=windowWidth/2+210 && mouseY>=windowHeight-77 && mouseY<=windowHeight-37 && showNextLevel){
       isRunning = "LevelSelect"
     }
   }
 }
 
 function UI(){
-    //showHands(handsCounter)
     stroke(0)
     fill(255,255,0)
     textSize(30)
     text("Level " + level, windowWidth/2-60, 30)
     stroke(0)
-    fill(255)
-    rect(10, 60, 40, 50)
-    fill(0,0,255)
-    rect(10, 110-mana, 40, mana)
+    fill(BLACK_BLUE)
+    rect(15, 50, 40, 100)
+    fill(LIGHT_BLUE)
+    rect(15, 150-mana*2, 40, mana*2)
     
-    fill(0,255,0)
+    fill(255)
     textSize(20)
     if(mana<10){
-      text(Math.trunc(mana), 25, 93)
+      text(Math.trunc(mana), 30, 103)
     }else{
-      text(Math.trunc(mana), 20, 93)
+      text(Math.trunc(mana), 25, 103)
     }
     //text(tropasOnHold.length, 10, 50)
     text("Mana", 10, 40)
     stroke(0)
     if(mana>=6){
-      fill(0,255,0)
+      fill(DARK_GREEN)
     }else{
-      fill(128)
+      fill(BLACK_GREEN)
     }
     rect(70, 30, 100, 80)
     if(mana>=14){
-      fill(0,255,0)
+      fill(DARK_GREEN)
     }else{
-      fill(128)
+      fill(BLACK_GREEN)
     }
     rect(190, 30, 100, 80)
     if(mana>=9){
-      fill(0,255,0)
+      fill(DARK_GREEN)
     }else{
-      fill(128)
+      fill(BLACK_GREEN)
     }
     rect(310, 30, 100, 80)
     if(mana>=12){
-      fill(0,255,0)
+      fill(DARK_GREEN)
     }else{
-      fill(128)
+      fill(BLACK_GREEN)
     }
     rect(430, 30, 100, 80)
-    fill(255)
-    circle(170,30,30)
-    circle(290,30,30)
-    circle(410,30,30)
-    circle(530,30,30)
-    stroke(0)
-    fill(0)
-    textSize(15)
-    text("Q", 165, 35)
-    text("W", 282, 35)
-    text("E", 405, 35)
-    text("R", 525, 35)
+    if(!upgrades[4]){
+      fill(30)
+    }else if(mana>=25){
+      fill(DARK_GREEN)
+    }else{
+      fill(BLACK_GREEN)
+    }
+    rect(550, 60, 50, 50)
     noStroke()
     image(warrior, 70, 30, 80, 80, 147, ALLY_WARRIOR_WALKING, 80, 80)
     image(archer, 190, 30, 80, 80, 142, ALLY_ARCHER_WALKING, 80, 80)
     image(spearman, 310, 30, 80, 80, -15, ALLY_SPEARMAN_WALKING, 80, 80)
     image(shieldman, 430, 30, 80, 80, -20, ALLY_SHIELDMAN_WALKING, 80, 80)
+    if(upgrades[4]){
+      image(zombieHand, 550,60,50,50)
+    }else{
+      tint(50,200)
+      image(zombieHand, 550,60,50,50)
+      noTint()
+      image(locker, 550,60,50,50)
+    }
+    fill(BLACK_BLUE)
+    circle(170,30,30)
+    circle(290,30,30)
+    circle(410,30,30)
+    circle(530,30,30)
+    circle(600,60,25)
+    stroke(0)
+    fill(255,255,0)
+    textSize(15)
+    text("Q", 165, 35)
+    text("W", 283, 35)
+    text("E", 405, 35)
+    text("R", 525, 35)
+    text("T", 595, 65)
     for(let i=0; i<tropasOnHold.length; i++){
-      noFill()
+      fill(BLACK_GREEN)
       stroke(0)
       auxImg = null
       auxX = 0
@@ -350,30 +426,33 @@ function UI(){
       console.log(auxImg, auxPosition)
       rect(windowWidth/2 + 50*i, 40 + 50*Math.floor(i/16), 40, 40)
       if(i == 0){
-        fill(0,255,0)
+        fill(DARK_GREEN)
         rect(windowWidth/2, 40 + 40-allyTimer/3, 40, allyTimer/3)
       }
       noStroke()
       image(auxImg, windowWidth/2 + 50*i, 40 + 50*Math.floor(i/16), 40, 40, auxX, auxPosition, 80, 80)
     }
+    for(let i = 0; i<currentMaxLife ; i++){
+      displayHearts(60 + 35*i, windowHeight-260, BLACK_PINK)
+    }
     for(let i = 0; i<game.allyBase ; i++){
       displayHearts(60 + 35*i, windowHeight-260, PINK)
-    }
+    } 
     for(let i = 0; i<3 ; i++){
-      displayHearts(60 + 35*i, windowHeight-260, 0)
+      displayHearts(windowWidth-115 + 35*i, windowHeight-320, BLACK_PINK)
     }
     for(let i = 0; i<game.enemyBase ; i++){
       displayHearts(windowWidth-115 + 35*i, windowHeight-320, PINK)
-    }
-    for(let i = 0; i<3 ; i++){
-      displayHearts(windowWidth-115 + 35*i, windowHeight-320, 0)
-    }
-    fill(0,0,255)
-    stroke(0,0,255)
+    }   
+    fill(255)
+    stroke(0)
     text("6", 75, 45)
     text("14", 195, 45)
     text("9", 315, 45)
     text("12", 435, 45)
+    if(upgrades[4]){
+      text("25", 555, 75)
+    }
     stroke(0)
     fill(0)
     rect(70, 110, 100, 40)
@@ -399,43 +478,52 @@ function UI(){
     text("RANGE: 3", 192, 142)
     text("RANGE: 2", 312, 142)
     text("RANGE: 1", 432, 142)   
+    skillDetails()
+    showAttributes()
 }
 
 function endStage(){
 
-  stroke(0)
+  stroke(DARK_GREEN)
   textSize(60)
-  fill(0)
+  fill(DARK_GREEN)
   if(isRunning == "victory"){
-    text("You Win!", windowWidth/2-140, windowHeight/2-140)
-    textSize(40)
-    text("Select a upgrade", windowWidth/2-160, windowHeight/2-80)
-    fill(255,0,0)
-    rect(windowWidth/7, windowHeight/2-40, 150, 150)
-    fill(255,255,0)
-    rect(2*windowWidth/7, windowHeight/2-40, 150, 150)
-    fill(0,128,255)
-    rect(3*windowWidth/7, windowHeight/2-40, 150, 150)
-    fill(0,255,0)
-    rect(4*windowWidth/7, windowHeight/2-40, 150, 150)
-    fill(255,128,0)
-    rect(5*windowWidth/7, windowHeight/2-40, 150, 150)
-    
+    text("You Win!", windowWidth/2-120, windowHeight/2-140)
+    textSize(30)
+    text("Choose an upgrade", windowWidth/2-130, windowHeight/2-80)
+    displayUpgrades()
+    if(showNextLevel){
+      fill(BACKGROUND_COLOR)
+      stroke(DARK_GREEN)
+      if(lastLevel!=6){
+        rect(windowWidth/2-200, windowHeight-77, 150, 40)
+      }
+      rect(windowWidth/2+50, windowHeight-77, 160, 40)
+      fill(DARK_GREEN)
+      textSize(20)
+      if(lastLevel!=6){
+        text("Continue", windowWidth/2-165, windowHeight-50)
+      }
+      text("Return to Menu", windowWidth/2+60, windowHeight-50)
+    }
   }
   if(isRunning == "defeat"){
-    fill(255)
-    rect(windowWidth/2-125, windowHeight/2-40, 225, 40)
-    fill(0)
-    text("You Lose!", windowWidth/2-140, windowHeight/2-140)
+    fill(BACKGROUND_COLOR)
+    rect(windowWidth/2-200, windowHeight-77, 150, 40)
+    rect(windowWidth/2+50, windowHeight-77, 160, 40)
+    fill(DARK_GREEN)
+    text("You Lose!", windowWidth/2-140, windowHeight/2-300)
+    image(tombstone, 2*(windowWidth/6), windowHeight/4-50, 2*windowWidth/6, 2*windowHeight/4+130)
     textSize(20)
-    text("Return to level selection", windowWidth/2-120, windowHeight/2-15)
+    text("Restart Level", windowWidth/2-185, windowHeight-50)
+    text("Return to Menu", windowWidth/2+60, windowHeight-50)
   }
 }
 
 function spawn(){
   if (tropasOnHold.length > 0){
     allyTimer += 1
-    if(allyTimer % 120 == 0){    
+    if(allyTimer % castTime == 0){    
       game.addAlly(tropasOnHold[0])
       tropasOnHold.shift()
       allyTimer = 0
@@ -469,11 +557,7 @@ function resetAll(){
 }
 
 function displayHearts(px, py, color){
-  if(color==0){
-    noFill()
-  }else{
-    fill(color)
-  }
+  fill(color)
   stroke(0)
   beginShape()
   for (let a=0; a< TWO_PI; a+=0.01){
@@ -486,20 +570,89 @@ function displayHearts(px, py, color){
 }
 
 function showHands(i){
-  tint(255, 200)
-  image(hands[Math.floor(i/10)], 2*(windowWidth/7), 50, 500, 500)  
-  noTint()
+    tint(255, 200)
+    image(hands[Math.floor(i/10)], (windowWidth/4), 50, windowWidth/2, windowWidth/2-100)  
+    noTint()
 }
 
 function displayUpgrades(){
+  noStroke()
+  fill(255,0,0)
+  rect(3*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  fill(153,76,0)
+  rect(8*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  fill(0,128,255)
+  rect(13*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  fill(0,180,0)
+  rect(18*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  fill(255,140,0)
+  rect(23*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  stroke(255)
+  fill(255)
+  textSize(20)
+  text("+1 Life", 3*windowWidth/29+45, windowHeight/2+60)
+  text("Cast Time", 8*windowWidth/29+35, windowHeight/2+50)
+  text("Reduction", 8*windowWidth/29+35, windowHeight/2+70)
+  text("Mana Max", 13*windowWidth/29+30, windowHeight/2+50)
+  text("+25", 13*windowWidth/29+62, windowHeight/2+80)
+  text("Mana Regen", 18*windowWidth/29+20, windowHeight/2+50)
+  text("+50%", 18*windowWidth/29+55, windowHeight/2+80)
+  text("New Skill:", 23*windowWidth/29+35, windowHeight/2+50)
+  text("Zombieland", 23*windowWidth/29+25, windowHeight/2+80)
+}
 
+function skillDetails(){
+  //rect(550, 60, 50, 50)
+  if(upgrades[4]){
+    if(mouseX>=550 && mouseX<=600 && mouseY>=60 && mouseY<=110){
+      fill(0)
+      noStroke()
+      rect(575,85,100,40)
+      fill(255)
+      textSize(10)
+      text("Paralyze enemies", 585, 100)
+      text("for 5 seconds", 585, 115)
+    }
+  }
+}
+
+function showAttributes(){
+  if(!hideMenu){
+    fill(0)
+    strokeWeight(3)
+    stroke(0)
+    rect(30,160,105,120)
+    strokeWeight(1)
+    textSize(10)
+    fill(255,0,0)
+    stroke(255,0,0)
+    text("Max Life: " + str(currentMaxLife) + " hearts", 35, 205)
+    fill(153,76,0)
+    stroke(153,76,0)
+    text("Cast Time: " + str(castTime/60) + " sec", 35, 225)
+    fill(0,128,255)
+    stroke(0,128,255)
+    text("Max Mana: " + str(maxMana), 35, 245)
+    fill(0,180,0)
+    stroke(0,180,0)
+    text("Mana Regen: " + str(manaRegen*60) + "/sec", 35, 265)
+  }
+  stroke(0)
+  strokeWeight(3)
+  fill(BLACK_GREEN)
+  rect(30,160,105,30)
+  circle(30, 175, 30)
+  strokeWeight(1)
+  stroke(0)
+  fill(255,255,0)
+  textSize(15)
+  text("X", 25, 180)
+  text("Status", 65, 180)
 }
 
 let current_frame = 0;
 function draw() {
-  console.log(isRunning)
   if (isRunning == "playing"){
-      handsCounter = (handsCounter + 1) %140
       if (level == 1){
         image(back1, 0, 0, windowWidth, windowHeight)
       }else if (level == 2){
@@ -533,27 +686,38 @@ function draw() {
       if (level== 6){
         spawnEnemies(game,"hard")
       }
-      mana = Math.min(mana+0.035, 50)
-      enemyMana += 0.035 
+      mana = Math.min(mana+manaRegen, maxMana)
       game.fight()
       game.display()
       displayLichKing(allyTimer)
       if(game.enemyBase <= 0){
+        lastLevel = level
         isRunning = "victory"
+        showNextLevel = !showNextLevel
         maxLevel = Math.min(maxLevel+1, 6)
         resetAll()
       }
       if(game.allyBase <= 0){
+        lastLevel = level
         isRunning = "defeat"
         resetAll()
+      }
+      if(paralyzed){
+        handsCounter = (handsCounter + 1) % 300
+        handsAnimation = (handsAnimation+1)%140
+        showHands(handsAnimation)
+        if(handsCounter == 0){
+          paralyzed = !paralyzed
+          handsAnimation = 0
+        }
       }
   }else if(isRunning == "Menu"){
     image(menuBack, 0, 0, windowWidth, windowHeight)
   }else if(isRunning == "LevelSelect"){
-    background(255)
+    background(BACKGROUND_COLOR)
     drawChooseLevel()
   }else{
-    background(255)
+    background(BACKGROUND_COLOR)
     endStage()
   }
 }

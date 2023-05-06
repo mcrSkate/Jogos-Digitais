@@ -127,32 +127,60 @@ function display_troops(troop){
       imgW = ((current_frame % qtdFrames) * 64);
     }else if (troop.tipo == 5){
       troop_sprite = enemyWarrior
-      if (troop.movement == "walking"){ 
-        imgH += ENEMY_WARRIOR_WALKING;
-        qtdFrames = ENEMY_WARRIOR_WALKING_FRAMES;
-        imgW = ((current_frame % qtdFrames) * 64)+8;
-      }else if(troop.movement == "attacking"){
-        imgH += ENEMY_WARRIOR_SLASH;
-        qtdFrames = ENEMY_WARRIOR_SLASH_FRAMES;
-        imgW = ((current_frame % qtdFrames) * 128)+32;
+      if (level == 6){
+        if (troop.movement == "walking"){ 
+          imgH += ALLY_WARRIOR_WALKING-256;
+          qtdFrames = ALLY_WARRIOR_WALKING_FRAMES;
+        }else if(troop.movement == "attacking"){
+          imgH += ALLY_WARRIOR_SLASH-256;
+          qtdFrames = ALLY_WARRIOR_SLASH_FRAMES;
+        }else{
+          imgH += ALLY_WARRIOR_WALKING-256;
+          qtdFrames = 1;
+        }
+        imgW = ((current_frame % qtdFrames) * 128)+24;
       }else{
-        imgH += ENEMY_WARRIOR_WALKING;
-        qtdFrames = 1;
-        imgW = ((current_frame % qtdFrames) * 64)+8;
+        if (troop.movement == "walking"){ 
+          imgH += ENEMY_WARRIOR_WALKING;
+          qtdFrames = ENEMY_WARRIOR_WALKING_FRAMES;
+          imgW = ((current_frame % qtdFrames) * 64);
+        }else if(troop.movement == "attacking"){
+          imgH += ENEMY_WARRIOR_SLASH;
+          qtdFrames = ENEMY_WARRIOR_SLASH_FRAMES;
+          imgW = ((current_frame % qtdFrames) * 128)+32;
+        }else{
+          imgH += ENEMY_WARRIOR_WALKING;
+          qtdFrames = 1;
+          imgW = ((current_frame % qtdFrames) * 64);
+        }
       }
     }else if (troop.tipo == 6){
       troop_sprite = enemyArcher
-      if (troop.movement == "walking"){ 
-        imgH += ENEMY_ARCHER_WALKING;
-        qtdFrames = ENEMY_ARCHER_WALKING_FRAMES;
-      }else if(troop.movement == "attacking"){
-        imgH += ENEMY_ARCHER_SHOOTING;
-        qtdFrames = ENEMY_ARCHER_SHOOTING_FRAMES;
+      if(level==6){
+        if (troop.movement == "walking"){ 
+          imgH += ENEMY_SPEARMAN_WALKING;
+          qtdFrames = ENEMY_SPEARMAN_WALKING_FRAMES;
+        }else if(troop.movement == "attacking"){
+          imgH += ENEMY_SPEARMAN_THRUST;
+          qtdFrames = ENEMY_SPEARMAN_THRUST_FRAMES;
+        }else{
+          imgH += ENEMY_SPEARMAN_WALKING;
+          qtdFrames = 1;
+        }
+        imgW = ((current_frame % qtdFrames) * 64);
       }else{
-        imgH += ENEMY_ARCHER_WALKING;
-        qtdFrames = 1;
+        if (troop.movement == "walking"){ 
+          imgH += ENEMY_ARCHER_WALKING;
+          qtdFrames = ENEMY_ARCHER_WALKING_FRAMES;
+        }else if(troop.movement == "attacking"){
+          imgH += ENEMY_ARCHER_SHOOTING;
+          qtdFrames = ENEMY_ARCHER_SHOOTING_FRAMES;
+        }else{
+          imgH += ENEMY_ARCHER_WALKING;
+          qtdFrames = 1;
+        }
+        imgW = ((current_frame % qtdFrames) * 64);
       }
-      imgW = ((current_frame % qtdFrames) * 64);
     }else if (troop.tipo == 7){
       troop_sprite = enemySpearman
       if (troop.movement == "walking"){ 
@@ -186,8 +214,11 @@ function display_troops(troop){
     //o imgH seleciona qual é animacao, elas estão descritas no sketch.js
     stroke(0)
     image(troop_sprite, troop.x -64, windowHeight - 74 - 128, 128, 128, imgW , imgH, 64, 64);
-    fill(128)
+    fill(DARK_RED)
     rect(troop.x-40, windowHeight-140-64, 80, 20)
     fill(255,0,0)
     rect(troop.x-40, windowHeight-140-64, 80 * troop.life/troop.max_life, 20)
+    if(paralyzed && troop.tipo > 4){
+      image(zombieHand, troop.x-32, windowHeight-122, 64,48)
+    }
   }
