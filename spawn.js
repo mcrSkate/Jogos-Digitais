@@ -24,13 +24,17 @@ function spawnEasy(game)
     var enemiesAlive = game.enemies.length;
     var shouldSpawn = false;
 
-    if (enemiesTotalCount < easyMaxSpawn)
+    var maxEnemies = 3;
+
+    if (enemiesTotalCount > easyMaxSpawn)
     {
-        if (enemiesAlive < 3)
-        {
-            shouldSpawn = true;
-        }
-    }    
+        maxEnemies = 1;
+    }
+    
+    if (enemiesAlive < maxEnemies)
+    {
+        shouldSpawn = true;
+    }
     
     if (totalFrameCounter % 100 != 0) return
 
@@ -62,13 +66,17 @@ function spawnMedium(game)
     var enemiesAlive = game.enemies.length;
     var shouldSpawn = false;
 
-    if (enemiesTotalCount < easyMaxSpawn)
+    var maxEnemies = 4;
+
+    if (enemiesTotalCount > mediumMaxSpawn)
     {
-        if (enemiesAlive < 4)
-        {
-            shouldSpawn = true;
-        }
-    }    
+        maxEnemies = 2;
+    }
+    
+    if (enemiesAlive < maxEnemies)
+    {
+        shouldSpawn = true;
+    }   
     
     if (totalFrameCounter % 100 != 0) return
 
@@ -100,13 +108,22 @@ function spawnHard(game)
     var enemiesAlive = game.enemies.length;
     var shouldSpawn = false;
 
-    if (enemiesTotalCount < easyMaxSpawn)
+    var maxEnemies = 5;
+
+    if (enemiesTotalCount > mediumMaxSpawn)
     {
-        if (enemiesAlive < 5)
-        {
-            shouldSpawn = true;
-        }
-    }    
+        maxEnemies = 3;
+    }
+
+    if (enemiesTotalCount > hardMaxSpawn)
+    {
+        maxEnemies = 2;
+    }
+    
+    if (enemiesAlive < maxEnemies)
+    {
+        shouldSpawn = true;
+    }     
     
     if (totalFrameCounter % 100 != 0) return
 
