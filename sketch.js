@@ -22,6 +22,7 @@ let handsAnimation = 0
 let showNextLevel = true
 var paralyzed = false
 let hideMenu = true
+let lastChoosedUpgrade = -1
 
 //Entities
 let lichKing
@@ -46,6 +47,13 @@ const BLACK_GREEN = 'rgb(0,33,33)'
 const LIGHT_BLUE = 'rgb(0,128,255)'
 const BLACK_BLUE = 'rgb(0,0,51)'
 const DARK_RED = 'rgb(51,0,0)'
+const RED = 'rgb(255,0,0)'
+const BROWN = 'rgb(153,76,0)'
+const BLUE = 'rgb(0,128,255)'
+const GREEN = 'rgb(0,180,0)'
+const ORANGE = 'rgb(255,140,0)'
+const GREY = 'rgb(128,128,128)'
+
 
 var hands = []
 
@@ -141,9 +149,9 @@ function setup() {
 
 function keyPressed(){
   console.log(keyCode)
-  if (isRunning == "Menu"){
+  if (isRunning == "Menu" && keyCode === 32){
     isRunning = "LevelSelect"
-  }else{
+  }else if(isRunning == "playing"){
     if (keyCode === 81){
       if(mana >= 6){  
         tropasOnHold.push(new Tropa(700, 300, 1, 80, 1))
@@ -197,32 +205,30 @@ function drawChooseLevel(){
   text("Select a level", windowWidth/2-180, windowHeight/2 - 140)
   strokeWeight(1)
   textSize(20)
-  fill(BACKGROUND_COLOR)
-  if (maxLevel>=1)
-    rect(windowWidth/2-60, windowHeight/2 -85, 120, 40)
-  if (maxLevel>=2)
-    rect(windowWidth/2-60, windowHeight/2 -40, 120, 40)
-  if (maxLevel>=3)
-    rect(windowWidth/2-60, windowHeight/2 +5, 120, 40)
-  if (maxLevel>=4)
-    rect(windowWidth/2-60, windowHeight/2 +50, 120, 40)
-  if (maxLevel>=5)
-    rect(windowWidth/2-60, windowHeight/2 +95, 120, 40)
-  if (maxLevel>=6)
-    rect(windowWidth/2-60, windowHeight/2 +140, 120, 40)
-  fill(DARK_GREEN)
-  if (maxLevel>=1)
-  text("Level 1", windowWidth/2-30, windowHeight/2-60)
-  if (maxLevel>=2)
-  text("Level 2", windowWidth/2-30, windowHeight/2-15)
-  if (maxLevel>=3)
-  text("Level 3", windowWidth/2-30, windowHeight/2+30)
-  if (maxLevel>=4)
-  text("Level 4", windowWidth/2-30, windowHeight/2+75)
-  if (maxLevel>=5)
-  text("Level 5", windowWidth/2-30, windowHeight/2+120)
-  if (maxLevel>=5)
-  text("Level 6", windowWidth/2-30, windowHeight/2+165)
+  if (maxLevel>=1){
+    buttonEffect(DARK_GREEN,BACKGROUND_COLOR,windowWidth/2-60, windowHeight/2 -85, 120, 40)
+    text("Level 1", windowWidth/2-30, windowHeight/2-60)
+  }
+  if (maxLevel>=2){
+    buttonEffect(DARK_GREEN,BACKGROUND_COLOR,windowWidth/2-60, windowHeight/2 -40, 120, 40)
+    text("Level 2", windowWidth/2-30, windowHeight/2-15)
+  }
+  if (maxLevel>=3){
+    buttonEffect(DARK_GREEN,BACKGROUND_COLOR,windowWidth/2-60, windowHeight/2 +5, 120, 40)
+    text("Level 3", windowWidth/2-30, windowHeight/2+30)
+  }
+  if (maxLevel>=4){
+    buttonEffect(DARK_GREEN,BACKGROUND_COLOR,windowWidth/2-60, windowHeight/2 +50, 120, 40)
+    text("Level 4", windowWidth/2-30, windowHeight/2+75)
+  }
+  if (maxLevel>=5){
+    buttonEffect(DARK_GREEN,BACKGROUND_COLOR,windowWidth/2-60, windowHeight/2 +95, 120, 40)
+    text("Level 5", windowWidth/2-30, windowHeight/2+120)
+  }
+  if (maxLevel>=6){
+    buttonEffect(DARK_GREEN,BACKGROUND_COLOR,windowWidth/2-60, windowHeight/2 +140, 120, 40)
+    text("Level 6", windowWidth/2-30, windowHeight/2+165)
+  }
 }
 
 function mouseClicked(){
@@ -235,7 +241,6 @@ function mouseClicked(){
         enemyArcher = blueEnemyArcher
         enemySpearman = blueEnemySpearman
         enemyShieldman = blueEnemyShieldman
-        print("a")
       }else 
       if(mouseY>=windowHeight/2-40 && mouseY<=windowHeight/2 && maxLevel>=2){
         level = 2
@@ -285,34 +290,43 @@ function mouseClicked(){
   }else if(isRunning=="victory"){
     if(mouseX>=3*windowWidth/29 && mouseX<=6*windowWidth/29 && mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+130 && !upgrades[0] && !showNextLevel){
       upgrades[0] = true
+      lastChoosedUpgrade = 0
       showNextLevel = !showNextLevel
       game.allyBase++
       currentMaxLife++
     }
     if(mouseX>=8*windowWidth/29 && mouseX<=11*windowWidth/29 && mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+130 && !upgrades[1] && !showNextLevel){
       upgrades[1] = true
+      lastChoosedUpgrade = 1
       showNextLevel = !showNextLevel
       castTime /= 2
     }
     if(mouseX>=13*windowWidth/29 && mouseX<=16*windowWidth/29 && mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+130 && !upgrades[2] && !showNextLevel){
       upgrades[2] = true
+      lastChoosedUpgrade = 2
       showNextLevel = !showNextLevel
       maxMana += 25
     }
     if(mouseX>=18*windowWidth/29 && mouseX<=21*windowWidth/29 && mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+130 && !upgrades[3] && !showNextLevel){
       upgrades[3] = true
+      lastChoosedUpgrade = 3
       showNextLevel = !showNextLevel
       manaRegen *= 1.5
     }
     if(mouseX>=23*windowWidth/29 && mouseX<=26*windowWidth/29 && mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+130 && !upgrades[4] && !showNextLevel){
       upgrades[4] = true
+      lastChoosedUpgrade = 4
       showNextLevel = !showNextLevel
     }
-    if(mouseX>=windowWidth/2-200 && mouseX<=windowWidth/2-50 && mouseY>=windowHeight-77 && mouseY<=windowHeight-37 && showNextLevel && lastLevel!=6){
-      level = lastLevel+1
-      isRunning = "playing"
+    if(mouseX>=windowWidth/2-200 && mouseX<=windowWidth/2-50 && mouseY>=windowHeight-77 && mouseY<=windowHeight-37 && showNextLevel){
+      lastChoosedUpgrade = -1
+      if (lastLevel!=6){
+        level = lastLevel+1
+        isRunning = "playing"
+      }
     }
     if(mouseX>=windowWidth/2+50 && mouseX<=windowWidth/2+210 && mouseY>=windowHeight-77 && mouseY<=windowHeight-37 && showNextLevel){
+      lastChoosedUpgrade = -1
       isRunning = "LevelSelect"
     }
   }
@@ -489,34 +503,36 @@ function endStage(){
   textSize(60)
   fill(DARK_GREEN)
   if(isRunning == "victory"){
-    text("You Win!", windowWidth/2-120, windowHeight/2-140)
-    textSize(30)
-    text("Choose an upgrade", windowWidth/2-130, windowHeight/2-80)
-    displayUpgrades()
+    if(lastLevel!=6){
+      text("You Win!", windowWidth/2-120, windowHeight/2-140)
+      textSize(30)
+      !showNextLevel ? text("Choose an upgrade", windowWidth/2-130, windowHeight/2-80) : text("Your choose was", windowWidth/2-110, windowHeight/2-80)
+      displayUpgrades()
+    }else{
+      showNextLevel = true
+      textSize(90)
+      text("Congratulations!", windowWidth/2-300, windowHeight/2-140)
+      textSize(30)
+      text("Now you are a Lich King!", windowWidth/2-170, windowHeight/2)
+    }
     if(showNextLevel){
-      fill(BACKGROUND_COLOR)
-      stroke(DARK_GREEN)
-      if(lastLevel!=6){
-        rect(windowWidth/2-200, windowHeight-77, 150, 40)
-      }
-      rect(windowWidth/2+50, windowHeight-77, 160, 40)
-      fill(DARK_GREEN)
       textSize(20)
       if(lastLevel!=6){
+        buttonEffect(DARK_GREEN,BACKGROUND_COLOR,windowWidth/2-200, windowHeight-77, 150, 40)
         text("Continue", windowWidth/2-165, windowHeight-50)
       }
+      buttonEffect(DARK_GREEN,BACKGROUND_COLOR,windowWidth/2+50, windowHeight-77, 160, 40)
       text("Return to Menu", windowWidth/2+60, windowHeight-50)
     }
   }
   if(isRunning == "defeat"){
-    fill(BACKGROUND_COLOR)
-    rect(windowWidth/2-200, windowHeight-77, 150, 40)
-    rect(windowWidth/2+50, windowHeight-77, 160, 40)
     fill(DARK_GREEN)
     text("You Lose!", windowWidth/2-140, windowHeight/2-300)
     image(tombstone, 2*(windowWidth/6), windowHeight/4-50, 2*windowWidth/6, 2*windowHeight/4+130)
     textSize(20)
+    buttonEffect(DARK_GREEN,BACKGROUND_COLOR,windowWidth/2-200, windowHeight-77, 150, 40)
     text("Restart Level", windowWidth/2-185, windowHeight-50)
+    buttonEffect(DARK_GREEN,BACKGROUND_COLOR,windowWidth/2+50, windowHeight-77, 160, 40)
     text("Return to Menu", windowWidth/2+60, windowHeight-50)
   }
 }
@@ -576,30 +592,97 @@ function showHands(i){
     noTint()
 }
 
+function mouseOn(xi, yi, xf, yf){
+  return (mouseX >= xi && mouseX <= xi+xf && mouseY >= yi && mouseY <= yi+yf)
+}
+
+function drawButton(c1, c2, xa,ya,xb,yb){
+    fill(c1)
+    rect(xa, ya, xb, yb, 5)
+    stroke(c2)
+    fill(c2)
+}
+
+function buttonEffect(c1, c2, xa,ya,xb,yb){
+  stroke(c1)
+  if(mouseOn(xa,ya,xb,yb)){
+    drawButton(c1,c2,xa,ya,xb,yb)
+  }else{
+    drawButton(c2,c1,xa,ya,xb,yb)
+  }
+}
+
 function displayUpgrades(){
-  noStroke()
-  fill(255,0,0)
-  rect(3*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
-  fill(153,76,0)
-  rect(8*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
-  fill(0,128,255)
-  rect(13*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
-  fill(0,180,0)
-  rect(18*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
-  fill(255,140,0)
-  rect(23*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
-  stroke(255)
-  fill(255)
   textSize(20)
-  text("+1 Life", 3*windowWidth/29+45, windowHeight/2+60)
-  text("Cast Time", 8*windowWidth/29+35, windowHeight/2+50)
-  text("Reduction", 8*windowWidth/29+35, windowHeight/2+70)
-  text("Mana Max", 13*windowWidth/29+30, windowHeight/2+50)
-  text("+25", 13*windowWidth/29+62, windowHeight/2+80)
-  text("Mana Regen", 18*windowWidth/29+20, windowHeight/2+50)
-  text("+50%", 18*windowWidth/29+55, windowHeight/2+80)
-  text("New Skill:", 23*windowWidth/29+35, windowHeight/2+50)
-  text("Zombieland", 23*windowWidth/29+25, windowHeight/2+80)
+  stroke(RED)
+  let xpos = lastChoosedUpgrade==0 ? 13 : 3
+  console.log(lastChoosedUpgrade)
+  if(upgrades[0] && lastChoosedUpgrade != 0 && !showNextLevel){
+    stroke(GREY)
+    drawButton(GREY, 255, xpos*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }else if((mouseOn(3*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150) && lastChoosedUpgrade==-1) || lastChoosedUpgrade==0){
+    drawButton(RED, 255, xpos*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }else if(lastChoosedUpgrade==-1){
+    drawButton(255, RED, xpos*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }
+  if(lastChoosedUpgrade==0 || lastChoosedUpgrade==-1){
+    text("+1 Life", xpos*windowWidth/29+45, windowHeight/2+60)
+  }
+  stroke(BROWN)
+  xpos = lastChoosedUpgrade==1 ? 13 : 8
+  if(upgrades[1] && lastChoosedUpgrade != 1 && !showNextLevel){
+    stroke(GREY)
+    drawButton(GREY, 255, xpos*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }else if((mouseOn(8*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150) && lastChoosedUpgrade==-1) || lastChoosedUpgrade==1){
+    drawButton(BROWN, 255, xpos*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }else if(lastChoosedUpgrade==-1){
+    drawButton(255, BROWN, xpos*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }
+  if(lastChoosedUpgrade==1 || lastChoosedUpgrade==-1){
+    text("Cast Time", xpos*windowWidth/29+35, windowHeight/2+50)
+    text("Reduction", xpos*windowWidth/29+35, windowHeight/2+70)
+  }
+  stroke(BLUE)
+  if(upgrades[2] && lastChoosedUpgrade != 2 && !showNextLevel){
+    stroke(GREY)
+    drawButton(GREY, 255, 13*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }else if((mouseOn(13*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150) && lastChoosedUpgrade==-1) || lastChoosedUpgrade==2){
+    drawButton(BLUE, 255, 13*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }else if(lastChoosedUpgrade==-1){
+    drawButton(255, BLUE, 13*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }
+  if(lastChoosedUpgrade==2 || lastChoosedUpgrade==-1){
+    text("Mana Max", 13*windowWidth/29+30, windowHeight/2+50)
+    text("+25", 13*windowWidth/29+62, windowHeight/2+80)
+  }
+  stroke(GREEN)
+  xpos = lastChoosedUpgrade==3 ? 13 : 18
+  if(upgrades[3] && lastChoosedUpgrade != 3 && !showNextLevel){
+    stroke(GREY)
+    drawButton(GREY, 255, xpos*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }else if((mouseOn(18*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150) && lastChoosedUpgrade==-1) || lastChoosedUpgrade==3){
+    drawButton(GREEN, 255, xpos*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }else if(lastChoosedUpgrade==-1){
+    drawButton(255, GREEN, xpos*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }
+  if(lastChoosedUpgrade==3 || lastChoosedUpgrade==-1){
+    text("Mana Regen", xpos*windowWidth/29+20, windowHeight/2+50)
+    text("+50%", xpos*windowWidth/29+55, windowHeight/2+80)
+  }
+  stroke(ORANGE)
+  xpos = lastChoosedUpgrade==4 ? 13 : 23
+  if(upgrades[4] && lastChoosedUpgrade != 4 && !showNextLevel){
+    stroke(GREY)
+    drawButton(GREY, 255, xpos*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }else if((mouseOn(23*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150) && lastChoosedUpgrade==-1) || lastChoosedUpgrade==4){
+    drawButton(ORANGE, 255, xpos*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }else if(lastChoosedUpgrade==-1){
+    drawButton(255, ORANGE, xpos*windowWidth/29, windowHeight/2-20, 3*windowWidth/29, 150)
+  }
+  if(lastChoosedUpgrade==4 || lastChoosedUpgrade==-1){
+    text("New Skill:", xpos*windowWidth/29+35, windowHeight/2+50)
+    text("Zombieland", xpos*windowWidth/29+25, windowHeight/2+80)
+  }
 }
 
 function skillDetails(){
@@ -721,4 +804,6 @@ function draw() {
     background(BACKGROUND_COLOR)
     endStage()
   }
+  stroke(0)
+  fill(0)
 }
