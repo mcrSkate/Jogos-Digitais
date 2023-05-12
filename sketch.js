@@ -58,7 +58,7 @@ const GREY = 'rgb(128,128,128)'
 var hands = []
 
 function preload(){
-  menuBack = loadImage('assets/menuBack.jpg')
+  menuBack = loadImage('assets/menuBack.png')
   back1 = loadImage('assets/sprites/backs/back1.jpeg')
   back2 = loadImage('assets/sprites/backs/back2.jpeg')
   back3 = loadImage('assets/sprites/backs/back3.jpg')
