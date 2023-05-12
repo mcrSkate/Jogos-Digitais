@@ -231,48 +231,71 @@ function drawChooseLevel(){
   }
 }
 
+function chooseEnemySprites(level){
+
+  switch(level){
+    case 1:
+      enemyWarrior = blueEnemyWarrior
+      enemyArcher = blueEnemyArcher
+      enemySpearman = blueEnemySpearman
+      enemyShieldman = blueEnemyShieldman
+      break
+    case 2:
+      enemyWarrior = yellowEnemyWarrior
+      enemyArcher = yellowEnemyArcher
+      enemySpearman = yellowEnemySpearman
+      enemyShieldman = yellowEnemyShieldman
+      break
+    case 3:
+      enemyWarrior = greenEnemyWarrior
+      enemyArcher = greenEnemyArcher
+      enemySpearman = greenEnemySpearman
+      enemyShieldman = greenEnemyShieldman
+      break
+    case 4:
+      enemyWarrior = brownEnemyWarrior
+      enemyArcher = brownEnemyArcher
+      enemySpearman = brownEnemySpearman
+      enemyShieldman = brownEnemyShieldman
+      break
+    case 5:
+      enemyWarrior = redEnemyWarrior
+      enemyArcher = redEnemyArcher
+      enemySpearman = redEnemySpearman
+      enemyShieldman = redEnemyShieldman
+      break
+    default:
+      enemyWarrior = castleEnemyWarrior
+      enemyArcher = castleEnemyArcher
+      enemySpearman = castleEnemySpearman
+      enemyShieldman = castleEnemyShieldman
+  }
+}
+
 function mouseClicked(){
   if (isRunning == "LevelSelect"){
     console.log(mouseX, mouseY)
     if(mouseX>=windowWidth/2-60 && mouseX<= windowWidth/2+60){
       if(mouseY>=windowHeight/2-85 && mouseY<=windowHeight/2-45 && maxLevel>=1){
         level = 1
-        enemyWarrior = blueEnemyWarrior
-        enemyArcher = blueEnemyArcher
-        enemySpearman = blueEnemySpearman
-        enemyShieldman = blueEnemyShieldman
+        chooseEnemySprites(level)
       }else 
       if(mouseY>=windowHeight/2-40 && mouseY<=windowHeight/2 && maxLevel>=2){
         level = 2
-        enemyWarrior = yellowEnemyWarrior
-        enemyArcher = yellowEnemyArcher
-        enemySpearman = yellowEnemySpearman
-        enemyShieldman = yellowEnemyShieldman
+        chooseEnemySprites(level)
       }else 
       if(mouseY>=windowHeight/2+5 && mouseY<=windowHeight/2+40 && maxLevel>=3){
         level = 3
-        enemyWarrior = greenEnemyWarrior
-        enemyArcher = greenEnemyArcher
-        enemySpearman = greenEnemySpearman
-        enemyShieldman = greenEnemyShieldman
+        chooseEnemySprites(level)
       }else if(mouseY>=windowHeight/2+50 && mouseY<=windowHeight/2+90 && maxLevel>=4){
         level = 4
-        enemyWarrior = brownEnemyWarrior
-        enemyArcher = brownEnemyArcher
-        enemySpearman = brownEnemySpearman
-        enemyShieldman = brownEnemyShieldman
+        chooseEnemySprites(level)
       }else if(mouseY>=windowHeight/2+95 && mouseY<=windowHeight/2+135 && maxLevel>=5){
         level = 5
-        enemyWarrior = redEnemyWarrior
-        enemyArcher = redEnemyArcher
-        enemySpearman = redEnemySpearman
-        enemyShieldman = redEnemyShieldman
+        chooseEnemySprites(level)
       }else if(mouseY>=windowHeight/2+140 && mouseY<=windowHeight/2+180 && maxLevel>=6){
         level = 6
-        enemyWarrior = castleEnemyWarrior
-        enemyArcher = castleEnemyArcher
-        enemySpearman = castleEnemySpearman
-        enemyShieldman = castleEnemyShieldman
+        chooseEnemySprites(level)
       }
     }
     if(level!=0){ 
@@ -282,6 +305,7 @@ function mouseClicked(){
   }else if(isRunning=="defeat"){
     if(mouseX>=windowWidth/2-200 && mouseX<=windowWidth/2-50 && mouseY>=windowHeight-77 && mouseY<=windowHeight-37){
       level = lastLevel
+      chooseEnemySprites(level)
       isRunning = "playing"
     }
     if(mouseX>=windowWidth/2+50 && mouseX<=windowWidth/2+210 && mouseY>=windowHeight-77 && mouseY<=windowHeight-37){
@@ -311,7 +335,7 @@ function mouseClicked(){
       upgrades[3] = true
       lastChoosedUpgrade = 3
       showNextLevel = !showNextLevel
-      manaRegen *= 1.5
+      manaRegen *= 1.25
     }
     if(mouseX>=23*windowWidth/29 && mouseX<=26*windowWidth/29 && mouseY>=windowHeight/2-20 && mouseY<=windowHeight/2+130 && !upgrades[4] && !showNextLevel){
       upgrades[4] = true
@@ -322,6 +346,7 @@ function mouseClicked(){
       lastChoosedUpgrade = -1
       if (lastLevel!=6){
         level = lastLevel+1
+        chooseEnemySprites(level)
         isRunning = "playing"
       }
     }
@@ -719,7 +744,7 @@ function showAttributes(){
     text("Max Mana: " + str(maxMana), 35, 245)
     fill(0,180,0)
     stroke(0,180,0)
-    text("Mana Regen: " + str(manaRegen*60) + "/sec", 35, 265)
+    text("Mana Regen: " + (manaRegen*60).toFixed(2) + "/sec", 35, 265)
   }
   stroke(0)
   strokeWeight(3)
